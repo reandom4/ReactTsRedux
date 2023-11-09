@@ -39,6 +39,7 @@ const Home = () => {
     const [cars,setCake] = useState(cakeData)
 
     const defaultTheme = createTheme();
+
     return (
         <>
             <ThemeProvider theme={defaultTheme}>
@@ -54,9 +55,9 @@ const Home = () => {
             <Box sx={{ ml: 4 , py: 2}}>
             <AddCakeForm  setCake={setCake}/>
             </Box>
+            <Box>
 
-
-
+            </Box>
             <Box sx={{ ml: 4 , py: 2}}>
             <Grid container spacing={4}>
                 {cars.length? (cars.map(cake => <CakeItem key = {cake.id} cake={cake}/>
@@ -68,7 +69,6 @@ const Home = () => {
 
             </ThemeProvider>
         
-
         </>
     )
 }
