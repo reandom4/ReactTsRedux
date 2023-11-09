@@ -1,0 +1,50 @@
+.main{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.item{
+    width: fit-content;
+    border: 1px solid;
+    margin-bottom: 20px;
+    margin-left: 5px;
+    padding: 5px;
+    display: block;
+}
+.image
+{
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 455px;
+    height: 400px;
+}
+.btn {
+    display: block;
+    padding: 6px 40px;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin-top: 8px;
+    text-decoration: none;
+    color: #111;
+    background-color: #fff;
+    max-width: 200px;
+}
+
+.btn:hover{
+ background-color: #bcd1e6 ;
+}
+.info{
+    padding: 10px;
+}
+
+.info h2{
+    margin-bottom: 5px;
+}
+
+.info p{
+    margin-bottom: 10px;
+}
