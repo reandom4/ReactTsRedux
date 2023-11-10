@@ -4,6 +4,9 @@ import {Link} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { actions } from "../../store/favorites/favorites.slise";
 
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
@@ -55,7 +58,7 @@ function CakeItem({cake}:CakeItemProps){
 
                   <CardActions>
                   <Link to={`/cake/${cake.id}`}><Button size="small">Read More</Button></Link>
-                    <Button size="small"onClick={()=> dispatch(actions.toggleFavorites(cake))}>{isExist? 'Remove from': 'Add to'} favorites</Button>
+                    <Button size="small"onClick={()=> dispatch(actions.toggleFavorites(cake))}>{isExist? <FavoriteIcon></FavoriteIcon> : <FavoriteBorderIcon></FavoriteBorderIcon>}</Button>
                   </CardActions>        
             </Card>
         </Grid>
