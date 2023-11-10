@@ -51,12 +51,12 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
         <IconButton sx={{ p: 0 }} onClick={handleClickOpen}>
           <AddIcon />
         </IconButton>
-        <Dialog open={open} onClose={handleClose} maxWidth="xl">
+        <Dialog open={open} onClose={handleClose} >
         <DialogTitle>Добавление тортов</DialogTitle>
         <DialogContent>
           
-        <form onSubmit={handleSubmit(createCake)}>
-        <Grid item xs={12} sm={6}>
+        <form onSubmit={handleSubmit(createCake)} >
+        <Grid item xs={12} sm={6} sx={{width:350}}>
           <TextField
             required
             id="name"

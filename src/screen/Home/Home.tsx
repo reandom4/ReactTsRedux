@@ -55,13 +55,13 @@ const Home = () => {
                     
                     <Box sx={{flexGrow:0}}>
                       <IconButton sx={{ p: 0 }}>
-                        <AddIcon />
+                      <AddCakeForm  setCake={setCake}/>
                       </IconButton>
                       </Box>
                 </Toolbar>
             </Appbar>
             <Box sx={{ ml: 4 , py: 2}}>
-            <AddCakeForm  setCake={setCake}/>
+            
             </Box>
             <Box sx={{ ml: 4 , py: 2}}>
             <Grid container spacing={4}>
