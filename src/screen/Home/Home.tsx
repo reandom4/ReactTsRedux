@@ -6,7 +6,11 @@ import AddCakeForm from "./AddCakeForm";
 
 import Appbar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
-import CameraIcon from '@mui/icons-material/PhotoCamera';
+
+import CakeIcon from '@mui/icons-material/Cake';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -45,7 +49,7 @@ const Home = () => {
             <CssBaseline />
             <Appbar position="relative">
                 <Toolbar>
-                    <CameraIcon sx={{ mr: 2 }} />
+                    <CakeIcon sx={{ mr: 2 }} />
                     <Typography variant="h6" color="inherit" noWrap>
                         Cake cataloge
                     </Typography>
