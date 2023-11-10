@@ -3,6 +3,8 @@ import {useEffect, useState} from "react";
 import {Link, useParams} from "react-router-dom";
 import {ICake} from "../../assets/types/cake.interface";
 import { CakeService } from "./cake.service";
+import Grid from '@mui/material/Grid';
+
 const CakeDetail =() =>{
     const {id} = useParams<string>()
     console.log(id)
@@ -22,8 +24,10 @@ const CakeDetail =() =>{
     if (!cake) return <p>Loading ...</p>
 
     return <>
+    <Grid container spacing={4}>
         <Link to='/'>Back</Link>
         <CakeItem cake={cake}/>
+    </Grid>
     </>
 }
 export default CakeDetail

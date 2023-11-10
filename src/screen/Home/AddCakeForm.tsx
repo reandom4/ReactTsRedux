@@ -68,7 +68,7 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
             {...register('image',{required: 'Name is required'})}
           />
         </Grid>
-        <Button color="inherit" >Create</Button>
+        <Button color="inherit" onClick={handleSubmit(createCake)} >Create</Button>
         
         </form>
         </>
