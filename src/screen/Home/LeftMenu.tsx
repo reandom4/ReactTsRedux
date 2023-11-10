@@ -1,20 +1,21 @@
 import { Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import React from "react";
+import {cakes as cakeData} from "./Cake.data";
 
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import MenuIcon from '@mui/icons-material/Menu';
+import { ICake } from "../../assets/types/cake.interface";
+import { useSelector } from "react-redux";
 
 type Anchor = 'left';
 
-const [state, setState] = React.useState({
-    left: false,
-  });
-  
-  
 
-export const  LeftMenu = () => {
+export function  LeftMenu  ({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) => void})  {
 
+    const [state, setState] = React.useState({
+        left: false,
+      });
     
     const toggleDrawer =
     (anchor: Anchor, open: boolean) =>
@@ -29,6 +30,34 @@ export const  LeftMenu = () => {
 
       setState({ ...state, [anchor]: open });
     };
+
+    interface RootState {
+        favorites: ICake[]
+      }
+
+    const [data,setData] = React.useState<ICake[] | null>(null)
+
+    const favorites = useSelector((state:RootState) => state.favorites)
+    
+    let isExist = false;
+    
+    
+    const showfollow = () => {
+        
+        setCake((prev:ICake[]) => [
+            ...favorites
+        ]);
+        
+    }
+
+    const showAll = () => {
+        
+        setCake((prev:ICake[]) => [
+            ...cakeData
+        ]);
+        
+    }
+
       const list = () => (
         <Box
           sx={{'auto' : 250 }}
@@ -39,7 +68,7 @@ export const  LeftMenu = () => {
           <List>
             { 
               <ListItem disablePadding>
-                <ListItemButton>
+                <ListItemButton onClick={showfollow}>
                   <ListItemIcon>
                     {<FavoriteIcon />}
                   </ListItemIcon>
@@ -51,7 +80,7 @@ export const  LeftMenu = () => {
           <List>
             { 
               <ListItem disablePadding>
-                <ListItemButton>
+                <ListItemButton onClick={showAll}>
                   <ListItemIcon>
                     {<FavoriteBorderIcon/>}
                   </ListItemIcon>

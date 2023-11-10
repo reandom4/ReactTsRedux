@@ -25,7 +25,7 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
                 {
                     id: prev.length + 1,
                     name: data.name,
-                    price: data.price, // Преобразовать строку в число
+                    price: data.price,
                     image: data.image,
                 },
                 ...prev
@@ -68,8 +68,7 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
             {...register('image',{required: 'Name is required'})}
           />
         </Grid>
-        <Button color="inherit" >Create</Button>
-        
+        <Button color="inherit" onClick={ handleSubmit(createCake)} >Create</Button>
         </form>
         </>
     )
