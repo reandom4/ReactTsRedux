@@ -44,7 +44,7 @@ export function  LeftMenu  ({setCake}:{setCake: (newCakes: (prev: ICake[]) => IC
     
     const showfollow = () => {
         
-        setCake((prev:ICake[]) => [
+        setCake(() => [
             ...favorites
         ]);
         
@@ -52,7 +52,7 @@ export function  LeftMenu  ({setCake}:{setCake: (newCakes: (prev: ICake[]) => IC
 
     const showAll = () => {
         
-        setCake((prev:ICake[]) => [
+        setCake(() => [
             ...cakeData
         ]);
         
@@ -100,6 +100,7 @@ export function  LeftMenu  ({setCake}:{setCake: (newCakes: (prev: ICake[]) => IC
                   aria-controls="long-menu"
                   aria-haspopup="true"
                   onClick={toggleDrawer('left', true)}
+                  
                 > 
                 <MenuIcon/> 
             </IconButton>

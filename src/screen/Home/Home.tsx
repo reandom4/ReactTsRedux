@@ -13,6 +13,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { LeftMenu } from "./LeftMenu";
 
 import AddIcon from '@mui/icons-material/Add';
+import { Avatar, IconButton, Tooltip } from "@mui/material";
 
 
 
@@ -38,12 +39,25 @@ const Home = () => {
         <>
             <ThemeProvider theme={defaultTheme}>
             <CssBaseline />
-            <Appbar position="relative">
+            
+            <Appbar position="static">
                 <Toolbar>
+                    
                     <LeftMenu setCake={setCake}/>
-                    <Typography variant="h6" color="inherit" noWrap>
+                    <Typography variant="h6" 
+                    color="inherit" 
+                    noWrap 
+                    component="div" 
+                    sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+                    >
                         Cake cataloge
                     </Typography>
+                    
+                    <Box sx={{flexGrow:0}}>
+                      <IconButton sx={{ p: 0 }}>
+                        <AddIcon />
+                      </IconButton>
+                      </Box>
                 </Toolbar>
             </Appbar>
             <Box sx={{ ml: 4 , py: 2}}>
