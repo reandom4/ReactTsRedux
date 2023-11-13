@@ -9,13 +9,15 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import * as React from 'react';
 import { LeftMenu } from "./LeftMenu";
-
+import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 import AddIcon from '@mui/icons-material/Add';
 import { Avatar, IconButton, Tooltip } from "@mui/material";
 
-
+const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
 function Copyright() {
     return (
@@ -30,16 +32,51 @@ function Copyright() {
     );
   }
 
+  function MyApp() {
+    const theme = useTheme();
+    const colorMode = React.useContext(ColorModeContext);
+    return (
+      <Box>
+        <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+          {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+        </IconButton>
+      </Box>
+    );
+  }
+
 const Home = () => {
 
-    const [cake,setCake] = useState(cakeData)
+    const [cake,setCake] = useState(cakeData);
 
     const defaultTheme = createTheme();
+
+    const [mode, setMode] = React.useState<'light' | 'dark'>('light');
+  const colorMode = React.useMemo(
+    () => ({
+      toggleColorMode: () => {
+        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+      },
+    }),
+    [],
+  );
+
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode],
+  );
+
+
     return (
         <>
             <ThemeProvider theme={defaultTheme}>
             <CssBaseline />
-            
+            <ColorModeContext.Provider value={colorMode}>
+                        <ThemeProvider theme={theme}>
             <Appbar position="static">
                 <Toolbar>
                     
@@ -57,20 +94,27 @@ const Home = () => {
                       <IconButton sx={{ p: 0 }}>
                       <AddCakeForm  setCake={setCake}/>
                       </IconButton>
-                      </Box>
+                    </Box>
+                    <Box>
+                     
+                          <MyApp />
+                        
+                    </Box>
                 </Toolbar>
             </Appbar>
-            <Box sx={{ ml: 4 , py: 2}}>
-            
-            </Box>
-            <Box sx={{ ml: 4 , py: 2}}>
+            <Box sx ={{bgcolor: 'background.default'}}>
+            <Box sx={{ ml: 4 , py: 2, bgcolor: 'background.default',
+              color: 'text.primary' } }>
             <Grid container spacing={4}>
-                {cake.length? (cake.map(cake => <CakeItem key = {cake.id} cake={cake}/>
-                ))
-                : <p>there are no cakes</p>
-                }
+              {cake.length? (cake.map(cake => <CakeItem key = {cake.id} cake={cake}/>
+              ))
+              : <p>there are no cakes</p>
+              }
             </Grid>
             </Box>
+            </Box>
+            </ThemeProvider>
+            </ColorModeContext.Provider>
 
             </ThemeProvider>
         

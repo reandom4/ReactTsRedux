@@ -90,7 +90,7 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
           />
         </Grid>
         <DialogActions>
-          <Button onClick={handleClose}>Add</Button>
+          <Button onClick={handleSubmit(createCake)}>Add</Button>
         </DialogActions>
         </form>
         </DialogContent>
