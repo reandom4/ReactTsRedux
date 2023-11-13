@@ -48,9 +48,19 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
     }
     return(
         <>
-        <IconButton sx={{ p: 0 }} onClick={handleClickOpen}>
+        <IconButton
+        color="inherit"
+        aria-label="more"
+        aria-controls="long-menu"
+        aria-haspopup="true"
+        sx={{ p: 0 }} 
+        onClick={handleClickOpen}>
           <AddIcon />
         </IconButton>
+
+
+
+        
         <Dialog open={open} onClose={handleClose} >
         <DialogTitle>Добавление тортов</DialogTitle>
         <DialogContent>
@@ -90,7 +100,7 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
           />
         </Grid>
         <DialogActions>
-          <Button onClick={handleClose}>Add</Button>
+          <Button onClick={handleSubmit(createCake)}>Add</Button>
         </DialogActions>
         </form>
         </DialogContent>
