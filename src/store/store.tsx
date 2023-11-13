@@ -1,9 +1,9 @@
 import {combineReducers, configureStore } from '@reduxjs/toolkit'
-import { reducer } from './favorites/favorites.slise'
+import { reducer as favoriteReducer } from './favorites/favorites.slise'
 // ...
 
 const reducers = combineReducers({
-    favorites:reducer,
+    favorites:favoriteReducer,
     })
 
 export const store = configureStore({

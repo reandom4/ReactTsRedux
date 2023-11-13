@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import Router from "./screen/ui/Router";
 import { Provider } from 'react-redux';
 import { store } from './store/store';
+import {ThemeProvider} from './screen/ThemeContext'
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -13,7 +14,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store = {store}>
-      <Router />
+      <ThemeProvider>
+        <Router />
+      </ThemeProvider>
     </Provider> 
   </React.StrictMode>
 );

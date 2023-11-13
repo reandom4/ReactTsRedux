@@ -11,15 +11,16 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import * as React from 'react';
 import { LeftMenu } from "./LeftMenu";
-import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
+import {useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import AddIcon from '@mui/icons-material/Add';
-import { Avatar, IconButton, Tooltip } from "@mui/material";
+import { Avatar, IconButton, Tooltip, useMediaQuery } from "@mui/material";
+import {useThem} from '../ThemeContext'
 
-const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
+export const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
-function Copyright() {
+export function Copyright() {
     return (
       <Typography variant="body2" color="text.secondary" align="center">
         {'Copyright © '}
@@ -32,7 +33,7 @@ function Copyright() {
     );
   }
 
-  function MyApp() {
+  export function ThemeButton() {
     const theme = useTheme();
     const colorMode = React.useContext(ColorModeContext);
     return (
@@ -49,15 +50,18 @@ const Home = () => {
     const [cake,setCake] = useState(cakeData);
 
     const defaultTheme = createTheme();
-
-    const [mode, setMode] = React.useState<'light' | 'dark'>('light');
+    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+    const {isDarkTheme, toggleTheme} = useThem();
+    const [mode, setMode] = React.useState<'light' | 'dark'>(isDarkTheme? 'dark' : 'light');
+    
   const colorMode = React.useMemo(
     () => ({
       toggleColorMode: () => {
-        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+        console.log(isDarkTheme);
+        setMode(isDarkTheme ? 'light' : 'dark');
       },
     }),
-    [],
+    [isDarkTheme,],
   );
 
   const theme = React.useMemo(
@@ -69,7 +73,7 @@ const Home = () => {
       }),
     [mode],
   );
-
+      
 
     return (
         <>
@@ -96,14 +100,15 @@ const Home = () => {
                       </IconButton>
                     </Box>
                     <Box>
-                     
-                          <MyApp />
-                        
+                      <IconButton onClick={toggleTheme}>
+                          <ThemeButton />
+                        </IconButton>
                     </Box>
                 </Toolbar>
             </Appbar>
+
             <Box sx ={{bgcolor: 'background.default'}}>
-            <Box sx={{ ml: 4 , py: 2, bgcolor: 'background.default',
+            <Box sx={{ ml: 4 , py: 2, bgcolor: 'background.default', width: '100%',
               color: 'text.primary' } }>
             <Grid container spacing={4}>
               {cake.length? (cake.map(cake => <CakeItem key = {cake.id} cake={cake}/>
