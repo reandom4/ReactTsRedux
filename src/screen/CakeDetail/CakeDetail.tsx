@@ -10,11 +10,40 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { LeftMenu } from "../Home/LeftMenu";
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
+import { ColorModeContext, ThemeButton } from "../Home/Home";
+import React from 'react';
+import {useThem} from '../ThemeContext'
+
+
+
 const CakeDetail =() =>{
     const {id} = useParams<string>()
-    console.log(id)
     const [cake, setCake] = useState<ICake>()
+    const defaultTheme = createTheme();
+    const {isDarkTheme, toggleTheme} = useThem();
+    const [mode, setMode] = React.useState<'light' | 'dark'>(isDarkTheme? 'dark' : 'dark');
+    
+
+  const colorMode = React.useMemo(
+    () => ({
+      toggleColorMode: () => {
+        console.log(isDarkTheme);
+        setMode(isDarkTheme ? 'light' : 'dark');
+      },
+    }),
+    [isDarkTheme,],
+  );
+
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode],
+  );
 
     useEffect(() => {
         if(!id) return
@@ -28,8 +57,12 @@ const CakeDetail =() =>{
     }, [id]);
 
     if (!cake) return <p>Loading ...</p>
-
+    console.log(defaultTheme)
     return <>
+    <ThemeProvider theme={defaultTheme}>
+            <CssBaseline />
+            <ColorModeContext.Provider value={colorMode}>
+            <ThemeProvider theme={theme}>
     <Appbar position="static">
                 <Toolbar>
                     <Typography variant="h6" 
@@ -40,16 +73,23 @@ const CakeDetail =() =>{
                     >
                         Cake cataloge
                     </Typography>
-                    
+                    <Box>
+                          <ThemeButton />
+                    </Box>
                 </Toolbar>
             </Appbar>
+            <Box sx ={{bgcolor: 'background.default',width: '100%'}}>
             <Box>
             <Link to='/'><Button>Back</Button> </Link>
             </Box>
+        
         <Grid container spacing={2} >
         <CakeItem cake={cake}/>
         </Grid>
-        
+        </Box>
+        </ThemeProvider>
+            </ColorModeContext.Provider>
+    </ThemeProvider>
     </>
 }
 export default CakeDetail
