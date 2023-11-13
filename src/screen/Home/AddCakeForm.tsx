@@ -10,10 +10,24 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-
+import { IconButton } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) => void}) {
-    
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
     const {register,handleSubmit,reset, formState: {errors}} = useForm<ICake>({
         mode: 'onChange'
     })
@@ -25,7 +39,7 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
                 {
                     id: prev.length + 1,
                     name: data.name,
-                    price: data.price, // Преобразовать строку в число
+                    price: data.price,
                     image: data.image,
                 },
                 ...prev
@@ -34,8 +48,15 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
     }
     return(
         <>
-        <form onSubmit={handleSubmit(createCake)}>
-        <Grid item xs={12} sm={6}>
+        <IconButton sx={{ p: 0 }} onClick={handleClickOpen}>
+          <AddIcon />
+        </IconButton>
+        <Dialog open={open} onClose={handleClose} >
+        <DialogTitle>Добавление тортов</DialogTitle>
+        <DialogContent>
+          
+        <form onSubmit={handleSubmit(createCake)} >
+        <Grid item xs={12} sm={6} sx={{width:350}}>
           <TextField
             required
             id="name"
@@ -68,9 +89,14 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
             {...register('image',{required: 'Name is required'})}
           />
         </Grid>
-        <Button color="inherit" onClick={handleSubmit(createCake)} >Create</Button>
-        
+        <DialogActions>
+          <Button onClick={handleClose}>Add</Button>
+        </DialogActions>
         </form>
+        </DialogContent>
+        
+      </Dialog>
+        
         </>
     )
 }

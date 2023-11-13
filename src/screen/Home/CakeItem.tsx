@@ -1,39 +1,35 @@
-import styles from "./HomePage.module.css"
 import {ICake} from "../../assets/types/cake.interface";
 import {Link} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { actions } from "../../store/favorites/favorites.slise";
-
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
-import CameraIcon from '@mui/icons-material/PhotoCamera';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
 
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+
 
 
 interface CakeItemProps {
     cake: ICake;
 }
+
+interface RootState {
+  favorites: ICake[]
+}
 function CakeItem({cake}:CakeItemProps){
-    //@ts-ignore
-    const {favorites} = useSelector(state => state)
+
+    
+    const favorites = useSelector((state:RootState) => state.favorites)
     const dispatch = useDispatch()
     const isExist = favorites.some((r: { id: number; }) => r.id === cake.id)
+    
     return(
         <Grid item key={cake.id} xs={12} sm={6} md={4}>
             <Card
@@ -58,7 +54,7 @@ function CakeItem({cake}:CakeItemProps){
 
                   <CardActions>
                   <Link to={`/cake/${cake.id}`}><Button size="small">Read More</Button></Link>
-                    <Button size="small"onClick={()=> dispatch(actions.toggleFavorites(cake))}>{isExist? <FavoriteIcon></FavoriteIcon> : <FavoriteBorderIcon></FavoriteBorderIcon>}</Button>
+                    <Button size="small"onClick={()=> dispatch(actions.toggleFavorites(cake))}>{isExist? <FavoriteIcon/>: <FavoriteBorderIcon/>} </Button>
                   </CardActions>        
             </Card>
         </Grid>
