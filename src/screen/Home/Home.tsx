@@ -43,6 +43,7 @@ const Home = () => {
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
     const {isDarkTheme, toggleTheme} = useThem();
     const [mode, setMode] = React.useState<'light' | 'dark'>(isDarkTheme? 'dark' : 'light');
+<<<<<<< Updated upstream
 
      function ThemeButton() {
       const theme = useTheme();
@@ -55,6 +56,8 @@ const Home = () => {
         </Box>
       );
     }
+=======
+>>>>>>> Stashed changes
     
   const colorMode = React.useMemo(
     () => ({
@@ -102,12 +105,22 @@ const Home = () => {
                       </IconButton>
                     </Box>
                     <Box>
+<<<<<<< Updated upstream
                       <ThemeButton />
+=======
+                      <IconButton onClick={toggleTheme}>
+                          <ThemeButton />
+                        </IconButton>
+>>>>>>> Stashed changes
                     </Box>
                 </Toolbar>
             </Appbar>
 
+<<<<<<< Updated upstream
             <Box sx ={{bgcolor: 'background.default'}}>
+=======
+            <Box sx ={{bgcolor: 'background.default' , minHeight: '100vh' }} >
+>>>>>>> Stashed changes
             <Box sx={{ ml: 4 , py: 2, bgcolor: 'background.default', width: '100%',
               color: 'text.primary' } }>
             <Grid container spacing={4}>
