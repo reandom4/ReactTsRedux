@@ -76,15 +76,15 @@ export default function SignIn() {
   return (
     <ThemeProvider theme={defaultTheme}>
          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical:'top', horizontal:'center' }}>
-        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-          incorrect login or password
+        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+          Incorrect login or password
         </Alert>
       </Snackbar>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 14,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',

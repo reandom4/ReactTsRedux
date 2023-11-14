@@ -33,112 +33,108 @@ export function Copyright() {
     );
   }
 
- 
+  export function ThemeButton() {
+    const theme = useTheme();
+    const colorMode = React.useContext(ColorModeContext);
+    return (
+      <Box>
+        <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+          {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+        </IconButton>
+      </Box>
+    );
+  }
 
 const Home = () => {
 
-    const [cake,setCake] = useState(cakeData);
+  const [cake,setCake] = useState(cakeData);
 
-    const defaultTheme = createTheme();
-    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-    const {isDarkTheme, toggleTheme} = useThem();
-    const [mode, setMode] = React.useState<'light' | 'dark'>(isDarkTheme? 'dark' : 'light');
-<<<<<<< Updated upstream
+  const defaultTheme = createTheme();
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const {isDarkTheme, toggleTheme} = useThem();
+  const [mode, setMode] = React.useState<'light' | 'dark'>(isDarkTheme? 'dark' : 'light');
 
-     function ThemeButton() {
-      const theme = useTheme();
-      const colorMode = React.useContext(ColorModeContext);
-      return (
-        <Box>
-          <IconButton sx={{ ml: 1 }} onClick={() => { colorMode.toggleColorMode(); toggleTheme(); }}  color="inherit">
-            {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-          </IconButton>
-        </Box>
-      );
-    }
-=======
->>>>>>> Stashed changes
-    
-  const colorMode = React.useMemo(
-    () => ({
-      toggleColorMode: () => {
-        console.log(isDarkTheme);
-        setMode(isDarkTheme ? 'light' : 'dark');
+   function ThemeButton() {
+    const theme = useTheme();
+    const colorMode = React.useContext(ColorModeContext);
+    return (
+      <Box>
+        <IconButton sx={{ ml: 1 }} onClick={() => { colorMode.toggleColorMode(); toggleTheme(); }}  color="inherit">
+          {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+        </IconButton>
+      </Box>
+    );
+  }
+  
+const colorMode = React.useMemo(
+  () => ({
+    toggleColorMode: () => {
+      console.log(isDarkTheme);
+      setMode(isDarkTheme ? 'light' : 'dark');
+    },
+  }),
+  [isDarkTheme,],
+);
+
+const theme = React.useMemo(
+  () =>
+    createTheme({
+      palette: {
+        mode,
       },
     }),
-    [isDarkTheme,],
-  );
+  [mode],
+);
+    
 
-  const theme = React.useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode,
-        },
-      }),
-    [mode],
-  );
+  return (
+      <>
+          <ThemeProvider theme={defaultTheme}>
+          <CssBaseline />
+          <ColorModeContext.Provider value={colorMode}>
+                      <ThemeProvider theme={theme}>
+          <Appbar position="static">
+              <Toolbar>
+                  
+                  <LeftMenu setCake={setCake}/>
+                  <Typography variant="h6" 
+                  color="inherit" 
+                  noWrap 
+                  component="div" 
+                  sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+                  >
+                      Cake cataloge
+                  </Typography>
+                  
+                  <Box sx={{flexGrow:0}}>
+                    <IconButton sx={{ p: 0 }}>
+                    <AddCakeForm  setCake={setCake}/>
+                    </IconButton>
+                  </Box>
+                  <Box>
+                    <ThemeButton />
+                  </Box>
+              </Toolbar>
+          </Appbar>
+
+          <Box sx ={{bgcolor: 'background.default'}}>
+          <Box sx={{ ml: 4 , py: 2, bgcolor: 'background.default', width: '100%',
+            color: 'text.primary' } }>
+          <Grid container spacing={4}>
+            {cake.length? (cake.map(cake => <CakeItem key = {cake.id} cake={cake}/>
+            ))
+            : <p>there are no cakes</p>
+            }
+          </Grid>
+          </Box>
+          </Box>
+          </ThemeProvider>
+          </ColorModeContext.Provider>
+
+          </ThemeProvider>
       
 
-    return (
-        <>
-            <ThemeProvider theme={defaultTheme}>
-            <CssBaseline />
-            <ColorModeContext.Provider value={colorMode}>
-                        <ThemeProvider theme={theme}>
-            <Appbar position="static">
-                <Toolbar>
-                    
-                    <LeftMenu setCake={setCake}/>
-                    <Typography variant="h6" 
-                    color="inherit" 
-                    noWrap 
-                    component="div" 
-                    sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-                    >
-                        Cake cataloge
-                    </Typography>
-                    
-                    <Box sx={{flexGrow:0}}>
-                      <IconButton sx={{ p: 0 }}>
-                      <AddCakeForm  setCake={setCake}/>
-                      </IconButton>
-                    </Box>
-                    <Box>
-<<<<<<< Updated upstream
-                      <ThemeButton />
-=======
-                      <IconButton onClick={toggleTheme}>
-                          <ThemeButton />
-                        </IconButton>
->>>>>>> Stashed changes
-                    </Box>
-                </Toolbar>
-            </Appbar>
-
-<<<<<<< Updated upstream
-            <Box sx ={{bgcolor: 'background.default'}}>
-=======
-            <Box sx ={{bgcolor: 'background.default' , minHeight: '100vh' }} >
->>>>>>> Stashed changes
-            <Box sx={{ ml: 4 , py: 2, bgcolor: 'background.default', width: '100%',
-              color: 'text.primary' } }>
-            <Grid container spacing={4}>
-              {cake.length? (cake.map(cake => <CakeItem key = {cake.id} cake={cake}/>
-              ))
-              : <p>there are no cakes</p>
-              }
-            </Grid>
-            </Box>
-            </Box>
-            </ThemeProvider>
-            </ColorModeContext.Provider>
-
-            </ThemeProvider>
-        
-
-        </>
-    )
-              }
-
+      </>
+  )
+            }
 export default Home
