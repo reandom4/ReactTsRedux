@@ -11,12 +11,12 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { LeftMenu } from "../Home/LeftMenu";
 import { Box, Button, IconButton, useTheme } from "@mui/material";
-import { ColorModeContext, ThemeButton } from "../Home/Home";
+import { ColorModeContext } from "../Home/Home";
 import React from 'react';
 import {useThem} from '../ThemeContext'
+
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-
 
 const CakeDetail =() =>{
     const {id} = useParams<string>()
@@ -25,13 +25,12 @@ const CakeDetail =() =>{
     const {isDarkTheme, toggleTheme} = useThem();
     const [mode, setMode] = React.useState<'light' | 'dark'>(isDarkTheme? 'dark' : 'light');
     
-
     function ThemeButton() {
       const theme = useTheme();
       const colorMode = React.useContext(ColorModeContext);
       return (
         <Box>
-          <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+          <IconButton sx={{ ml: 1 }} onClick={() => { colorMode.toggleColorMode(); toggleTheme(); }}  color="inherit">
             {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
           </IconButton>
         </Box>
@@ -91,7 +90,7 @@ const CakeDetail =() =>{
                     </Box>
                 </Toolbar>
             </Appbar>
-            <Box sx ={{bgcolor: 'background.default', minHeight: '100vh'}}>
+            <Box sx ={{bgcolor: 'background.default',minHeight: '100vh'}}>
             <Box>
             <Link to='/'><Button>Back</Button> </Link>
             </Box>
