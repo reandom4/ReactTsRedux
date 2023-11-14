@@ -10,11 +10,12 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { LeftMenu } from "../Home/LeftMenu";
-import { Box, Button } from "@mui/material";
+import { Box, Button, IconButton, useTheme } from "@mui/material";
 import { ColorModeContext, ThemeButton } from "../Home/Home";
 import React from 'react';
 import {useThem} from '../ThemeContext'
-
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 
 
 const CakeDetail =() =>{
@@ -25,6 +26,18 @@ const CakeDetail =() =>{
     const [mode, setMode] = React.useState<'light' | 'dark'>(isDarkTheme? 'dark' : 'dark');
     
 
+    function ThemeButton() {
+      const theme = useTheme();
+      const colorMode = React.useContext(ColorModeContext);
+      return (
+        <Box>
+          <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
+            {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+          </IconButton>
+        </Box>
+      );
+    }
+    
   const colorMode = React.useMemo(
     () => ({
       toggleColorMode: () => {
