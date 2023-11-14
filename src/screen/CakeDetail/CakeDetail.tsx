@@ -23,7 +23,7 @@ const CakeDetail =() =>{
     const [cake, setCake] = useState<ICake>()
     const defaultTheme = createTheme();
     const {isDarkTheme, toggleTheme} = useThem();
-    const [mode, setMode] = React.useState<'light' | 'dark'>(isDarkTheme? 'dark' : 'dark');
+    const [mode, setMode] = React.useState<'light' | 'dark'>(isDarkTheme? 'dark' : 'light');
     
 
     function ThemeButton() {
@@ -91,7 +91,7 @@ const CakeDetail =() =>{
                     </Box>
                 </Toolbar>
             </Appbar>
-            <Box sx ={{bgcolor: 'background.default',width: '100%'}}>
+            <Box sx ={{bgcolor: 'background.default', minHeight: '100vh'}}>
             <Box>
             <Link to='/'><Button>Back</Button> </Link>
             </Box>
