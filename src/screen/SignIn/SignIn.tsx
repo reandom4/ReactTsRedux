@@ -32,7 +32,6 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
 export default function SignIn() {
     
-    const [email, setEmail] = useState<string | null>(null);
     const [error, setError] = useState<boolean>(false);
     const navigate = useNavigate()
     const [open, setOpen] = useState(false);
@@ -41,15 +40,13 @@ export default function SignIn() {
      useEffect(() => {
       const isAuthenticated:string | null = localStorage.getItem('isAuthenticated')
 
-      if (isAuthenticated == 'true') {
+      if (isAuthenticated === 'true') {
         navigate('/Cake') 
       }
   
      },[])
-    
-    const handleClick = () => {
-        setOpen(true);
-    };
+
+     
 
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
@@ -58,6 +55,7 @@ export default function SignIn() {
 
     setOpen(false);
     };
+
     function isValidEmail(email: string| null) {
         if (email === null) {
             return false;

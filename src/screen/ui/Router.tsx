@@ -1,10 +1,6 @@
 import {BrowserRouter,  Route, Routes } from "react-router-dom";
 import Home from "../Home/Home"
 import CakeDetail from "../CakeDetail/CakeDetail"
-import { ThemeProvider} from '../ThemeContext';
-import React, { Component,useEffect,useState } from "react";
-
-import ProtectedRoute from "./ProtectedRoute";
 import SignIn from "../SignIn/SignIn";
 
 

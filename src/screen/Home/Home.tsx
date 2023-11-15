@@ -14,12 +14,14 @@ import { LeftMenu } from "./LeftMenu";
 import {useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import AddIcon from '@mui/icons-material/Add';
-import { Avatar, IconButton, Tooltip, useMediaQuery } from "@mui/material";
+import {IconButton, useMediaQuery } from "@mui/material";
 import {useThem} from '../ThemeContext'
-import { useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 
 export const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
+
+
+
 
 export function Copyright() {
     return (
@@ -46,16 +48,35 @@ export function Copyright() {
     );
   }
 
+  interface Cake {
+    id: number;
+    name: string;
+    photo: string;
+    price: number;
+  }
+
+
 const Home = () => {
 
   const [cake,setCake] = useState(cakeData);
-
   const defaultTheme = createTheme();
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const {isDarkTheme, toggleTheme} = useThem();
   const [mode, setMode] = React.useState<'light' | 'dark'>(isDarkTheme? 'dark' : 'light');
   const navigate = useNavigate()
+
+
+  const [cakes, setCakes] = useState<Cake[]>([]);
+  useEffect(() => {
+    fetch('/api/cakes') // Обращаемся к нашему API
+      .then((response) => response.json())
+      .then((data) => setCakes(data))
+      .catch((error) => console.error('Ошибка при получении тортов:', error));
+  }, []);
+  console.log(cakes)
+
   
+
   useEffect(() => {
     
     const isAuthenticated:string | null = localStorage.getItem('isAuthenticated')
@@ -121,9 +142,7 @@ const theme = React.useMemo(
                   </Typography>
                   
                   <Box sx={{flexGrow:0}}>
-                    <IconButton sx={{ p: 0 }}>
                     <AddCakeForm  setCake={setCake}/>
-                    </IconButton>
                   </Box>
                   <Box>
                     <ThemeButton />

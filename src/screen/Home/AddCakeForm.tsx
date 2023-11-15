@@ -1,37 +1,63 @@
 import React, {useState} from "react";
 import {ICake} from "../../assets/types/cake.interface";
-import {inspect} from "util";
-import styles from "./AddCakeForm.module.css"
 import {useForm} from "react-hook-form";
-
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import { IconButton } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
+
+
 function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) => void}) {
-  const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+    const handleClose = () => {
+      setOpen(false);
+    };
     const {register,handleSubmit,reset, formState: {errors}} = useForm<ICake>({
         mode: 'onChange'
     })
+
+
+
     const [data,setData] = useState<ICake | null>(null)
+    const [newCakeName, setNewCakeName] = useState('');
+    const [newCakePrice, setNewCakePrice] = useState<number>(0);
+    const [cakes, setCakes] = useState<ICake[]>([]);
+
+    const addCake = () => {
+      if (newCakeName === undefined || newCakePrice === undefined) {
+        console.error('Name or price is undefined');
+        return;
+      }
+      fetch('/api/cakes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: newCakeName, price: newCakePrice }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          // Обновляем список тортов после добавления нового
+          fetch('/api/cakes')
+            .then((response) => response.json())
+            .then((updatedData) => setCakes(updatedData))
+            .catch((error) => console.error('Ошибка при получении тортов:', error));
+        })
+        .catch((error) => console.error('Ошибка при добавлении торта:', error));
+    };
+
 
     const createCake = (data:ICake) => {
         console.log(data)
@@ -40,12 +66,19 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
                     id: prev.length + 1,
                     name: data.name,
                     price: data.price,
-                    image: data.image,
+                    image: data.image
+
                 },
                 ...prev
             ]);
+            setNewCakeName(data.name)
+            setNewCakePrice(data.price)
+            addCake()
         reset()
     }
+
+    
+
     return(
         <>
         <IconButton
