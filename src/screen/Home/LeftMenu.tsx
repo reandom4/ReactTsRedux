@@ -7,12 +7,14 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import MenuIcon from '@mui/icons-material/Menu';
 import { ICake } from "../../assets/types/cake.interface";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 type Anchor = 'left';
 
 
 export function  LeftMenu  ({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) => void})  {
 
+  const navigate = useNavigate()
     const [state, setState] = React.useState({
         left: false,
       });
@@ -58,6 +60,10 @@ export function  LeftMenu  ({setCake}:{setCake: (newCakes: (prev: ICake[]) => IC
         
     }
 
+    const back = () => {
+      navigate('/') 
+    }
+
       const list = () => (
         <Box
           sx={{'auto' : 250 }}
@@ -85,6 +91,18 @@ export function  LeftMenu  ({setCake}:{setCake: (newCakes: (prev: ICake[]) => IC
                     {<FavoriteBorderIcon/>}
                   </ListItemIcon>
                   <ListItemText primary={'Show all'} />
+                </ListItemButton>
+              </ListItem>         
+            }
+          </List>
+          <List>
+            { 
+              <ListItem disablePadding>
+                <ListItemButton onClick={back}>
+                  <ListItemIcon>
+                    {<FavoriteBorderIcon/>}
+                  </ListItemIcon>
+                  <ListItemText primary={'Log out'} />
                 </ListItemButton>
               </ListItem>         
             }
