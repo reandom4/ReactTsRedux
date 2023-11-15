@@ -1,5 +1,5 @@
 import {cakes as cakeData} from "./Cake.data";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import CakeItem from './CakeItem'
 import AddCakeForm from "./AddCakeForm";
 import Appbar from '@mui/material/AppBar';
@@ -17,6 +17,7 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import AddIcon from '@mui/icons-material/Add';
 import { Avatar, IconButton, Tooltip, useMediaQuery } from "@mui/material";
 import {useThem} from '../ThemeContext'
+import { useNavigate } from "react-router-dom";
 
 export const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
@@ -53,8 +54,21 @@ const Home = () => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const {isDarkTheme, toggleTheme} = useThem();
   const [mode, setMode] = React.useState<'light' | 'dark'>(isDarkTheme? 'dark' : 'light');
+  const navigate = useNavigate()
+  
+  useEffect(() => {
+    
+    const isAuthenticated:string | null = localStorage.getItem('isAuthenticated')
 
-   function ThemeButton() {
+    if (isAuthenticated !== 'true') {
+      navigate('/') 
+    }
+
+   },[])
+
+
+   function ThemeButton() 
+  {
     const theme = useTheme();
     const colorMode = React.useContext(ColorModeContext);
     return (

@@ -14,7 +14,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import React from 'react';
@@ -37,6 +37,16 @@ export default function SignIn() {
     const navigate = useNavigate()
     const [open, setOpen] = useState(false);
 
+
+     useEffect(() => {
+      const isAuthenticated:string | null = localStorage.getItem('isAuthenticated')
+
+      if (isAuthenticated == 'true') {
+        navigate('/Cake') 
+      }
+  
+     },[])
+    
     const handleClick = () => {
         setOpen(true);
     };
@@ -64,7 +74,9 @@ export default function SignIn() {
         setOpen(true);
     }
     else{
+      localStorage.setItem('isAuthenticated','true');
        navigate('/Cake') 
+       
     }
     console.log({
       email: data.get('email'),

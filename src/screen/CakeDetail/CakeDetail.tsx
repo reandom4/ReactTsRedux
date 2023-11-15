@@ -1,6 +1,6 @@
 import CakeItem from "../Home/CakeItem";
 import {useEffect, useState} from "react";
-import {Link, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {ICake} from "../../assets/types/cake.interface";
 import { CakeService } from "./cake.service";
 import Appbar from '@mui/material/AppBar';
@@ -24,6 +24,7 @@ const CakeDetail =() =>{
     const defaultTheme = createTheme();
     const {isDarkTheme, toggleTheme} = useThem();
     const [mode, setMode] = React.useState<'light' | 'dark'>(isDarkTheme? 'dark' : 'light');
+    const navigate = useNavigate()
     
     function ThemeButton() {
       const theme = useTheme();
@@ -56,6 +57,16 @@ const CakeDetail =() =>{
       }),
     [mode],
   );
+
+  useEffect(() => {
+    
+    const isAuthenticated:string | null = localStorage.getItem('isAuthenticated')
+
+    if (isAuthenticated !== 'true') {
+      navigate('/') 
+    }
+
+   },[])
 
     useEffect(() => {
         if(!id) return
