@@ -30,27 +30,22 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
 
 
     const [data,setData] = useState<ICake | null>(null)
-    const [newCakeName, setNewCakeName] = useState('');
-    const [newCakePrice, setNewCakePrice] = useState<number>(0);
     const [cakes, setCakes] = useState<ICake[]>([]);
 
-    const addCake = () => {
-      if (newCakeName === undefined || newCakePrice === undefined) {
-        console.error('Name or price is undefined');
-        return;
-      }
-      fetch('/api/cakes', {
+    const addCake = (data:ICake) => {
+      console.log(data.image)
+      fetch('http://localhost:3001/addcakes', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: newCakeName, price: newCakePrice }),
+        body: JSON.stringify({ name: data.name, image: data.image, price: data.price}),
       })
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
           // Обновляем список тортов после добавления нового
-          fetch('/api/cakes')
+          fetch('http://localhost:3001/cakes')
             .then((response) => response.json())
             .then((updatedData) => setCakes(updatedData))
             .catch((error) => console.error('Ошибка при получении тортов:', error));
@@ -71,13 +66,9 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
                 },
                 ...prev
             ]);
-            setNewCakeName(data.name)
-            setNewCakePrice(data.price)
-            addCake()
+            addCake(data)
         reset()
     }
-
-    
 
     return(
         <>

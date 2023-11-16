@@ -68,7 +68,7 @@ const Home = () => {
 
   const [cakes, setCakes] = useState<Cake[]>([]);
   useEffect(() => {
-    fetch('/api/cakes') // Обращаемся к нашему API
+    fetch('http://localhost:3001/cakes') // Обращаемся к нашему API
       .then((response) => response.json())
       .then((data) => setCakes(data))
       .catch((error) => console.error('Ошибка при получении тортов:', error));
