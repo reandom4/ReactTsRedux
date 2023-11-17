@@ -8,7 +8,6 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
 import * as React from 'react';
 import { LeftMenu } from "./LeftMenu";
 import {useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
@@ -22,41 +21,9 @@ import { ICake } from "../../assets/types/cake.interface";
 export const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
 
-
-
-export function Copyright() {
-    return (
-      <Typography variant="body2" color="text.secondary" align="center">
-        {'Copyright © '}
-        <Link color="inherit" href="https://mui.com/">
-          Your Website
-        </Link>{' '}
-        {new Date().getFullYear()}
-        {'.'}
-      </Typography>
-    );
-  }
-
-  export function ThemeButton() {
-    const theme = useTheme();
-    const colorMode = React.useContext(ColorModeContext);
-    return (
-      <Box>
-        <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color="inherit">
-          {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-        </IconButton>
-      </Box>
-    );
-  }
-
-
-
-
 const Home = () => {
 
-  const [cake,setCake] = useState(cakeData);
   const defaultTheme = createTheme();
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const {isDarkTheme, toggleTheme} = useThem();
   const [mode, setMode] = React.useState<'light' | 'dark'>(isDarkTheme? 'dark' : 'light');
   const navigate = useNavigate()
@@ -71,9 +38,6 @@ const Home = () => {
       .catch((error) => console.error('Ошибка при получении тортов:', error));
   }, []);
   
-
-  
-
   useEffect(() => {
     
     const isAuthenticated:string | null = localStorage.getItem('isAuthenticated')
@@ -83,7 +47,6 @@ const Home = () => {
     }
 
    },[])
-
 
   function ThemeButton() 
   {
@@ -139,7 +102,7 @@ const theme = React.useMemo(
                   </Typography>
                   
                   <Box sx={{flexGrow:0}}>
-                    <AddCakeForm  setCake={setCake}/>
+                    <AddCakeForm  setCake={setCakes}/>
                   </Box>
                   <Box>
                     <ThemeButton />
@@ -162,9 +125,7 @@ const theme = React.useMemo(
           </ColorModeContext.Provider>
 
           </ThemeProvider>
-      
-
       </>
   )
-            }
+}
 export default Home

@@ -27,7 +27,6 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
         mode: 'onChange'
     })
 
-    const [cakes, setCakes] = useState<ICake[]>([]);
 
     const addCake = (data:ICake) => {
       fetch('http://localhost:3001/addcakes', {
@@ -42,29 +41,14 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
           // Обновляем список тортов после добавления нового
           fetch('http://localhost:3001/cakes')
             .then((response) => response.json())
-            .then((updatedData) => setCakes(updatedData))
+            .then((updatedData) => setCake(updatedData))
             .catch((error) => console.error('Ошибка при получении тортов:', error));
         })
         .catch((error) => console.error('Ошибка при добавлении торта:', error));
         reset()
+        
+
     };
-
-
-    const createCake = (data:ICake) => {
-        console.log(data)
-            setCake((prev:ICake[]) => [
-                {
-                    id: prev.length + 1,
-                    name: data.name,
-                    price: data.price,
-                    image: data.image
-
-                },
-                ...prev
-            ]);
-            addCake(data)
-        reset()
-    }
 
     return(
         <>
@@ -78,9 +62,6 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
           <AddIcon />
         </IconButton>
 
-
-
-        
         <Dialog open={open} onClose={handleClose} >
         <DialogTitle>Добавление тортов</DialogTitle>
         <DialogContent>
