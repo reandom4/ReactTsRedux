@@ -28,7 +28,6 @@ function CakeItem({cake}:CakeItemProps){
     const favorites = useSelector((state:RootState) => state.favorites)
     const dispatch = useDispatch()
     const isExist = favorites.some((r: { id: number; }) => r.id === cake.id)
-    
     return(
         <Grid item key={cake.id} xs={12} sm={6} md={4}>
             <Card

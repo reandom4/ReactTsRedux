@@ -27,13 +27,9 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
         mode: 'onChange'
     })
 
-
-
-    const [data,setData] = useState<ICake | null>(null)
     const [cakes, setCakes] = useState<ICake[]>([]);
 
     const addCake = (data:ICake) => {
-      console.log(data.image)
       fetch('http://localhost:3001/addcakes', {
         method: 'POST',
         headers: {
@@ -43,7 +39,6 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           // Обновляем список тортов после добавления нового
           fetch('http://localhost:3001/cakes')
             .then((response) => response.json())
@@ -51,6 +46,7 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
             .catch((error) => console.error('Ошибка при получении тортов:', error));
         })
         .catch((error) => console.error('Ошибка при добавлении торта:', error));
+        reset()
     };
 
 
@@ -89,7 +85,7 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
         <DialogTitle>Добавление тортов</DialogTitle>
         <DialogContent>
           
-        <form onSubmit={handleSubmit(createCake)} >
+        <form onSubmit={handleSubmit(addCake)} >
         <Grid item xs={12} sm={6} sx={{width:350}}>
           <TextField
             required
@@ -124,7 +120,7 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
           />
         </Grid>
         <DialogActions>
-          <Button onClick={handleSubmit(createCake)}>Add</Button>
+          <Button onClick={handleSubmit(addCake)}>Add</Button>
         </DialogActions>
         </form>
         </DialogContent>

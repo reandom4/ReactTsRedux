@@ -53,11 +53,11 @@ export function  LeftMenu  ({setCake}:{setCake: (newCakes: (prev: ICake[]) => IC
     }
 
     const showAll = () => {
-        
-        setCake(() => [
-            ...cakeData
-        ]);
-        
+        fetch('http://localhost:3001/cakes') // Обращаемся к нашему API
+          .then((response) => response.json())
+          .then((data) => setCake(data))
+          .catch((error) => console.error('Ошибка при получении тортов:', error));
+
     }
 
     const back = () => {

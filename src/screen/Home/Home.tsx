@@ -128,7 +128,7 @@ const theme = React.useMemo(
           <Appbar position="static">
               <Toolbar>
                   
-                  <LeftMenu setCake={setCake}/>
+                  <LeftMenu setCake={setCakes}/>
                   <Typography variant="h6" 
                   color="inherit" 
                   noWrap 

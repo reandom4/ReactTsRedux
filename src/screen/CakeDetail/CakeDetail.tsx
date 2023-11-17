@@ -48,7 +48,6 @@ const CakeDetail =() =>{
   
           const data = await response.json();
           setCake(data);
-          console.log(data)
         } catch (error) {
           console.error('Ошибка при получении данных о торте:');
         }
