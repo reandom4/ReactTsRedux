@@ -29,60 +29,7 @@ export const cakes: ICake[] = [
         name: 'Колибри',
         price: 2500,
         image: 'https://i.pinimg.com/originals/79/41/33/7941338d13e7f69ef8cb7398b51736bc.jpg'
-    },
-    {
-        id: 6,
-        name: 'Колибри',
-        price: 2500,
-        image: 'https://i.pinimg.com/originals/79/41/33/7941338d13e7f69ef8cb7398b51736bc.jpg'
-    },
-    {
-        id: 7,
-        name: 'Колибри',
-        price: 2500,
-        image: 'https://i.pinimg.com/originals/79/41/33/7941338d13e7f69ef8cb7398b51736bc.jpg'
-    },
-    {
-        id: 8,
-        name: 'Колибри',
-        price: 2500,
-        image: 'https://i.pinimg.com/originals/79/41/33/7941338d13e7f69ef8cb7398b51736bc.jpg'
-    },
-    {
-        id: 9,
-        name: 'Колибри',
-        price: 2500,
-        image: 'https://i.pinimg.com/originals/79/41/33/7941338d13e7f69ef8cb7398b51736bc.jpg'
-    },
-    {
-        id: 10,
-        name: 'Колибри',
-        price: 2500,
-        image: 'https://i.pinimg.com/originals/79/41/33/7941338d13e7f69ef8cb7398b51736bc.jpg'
-    },
-    {
-        id: 11,
-        name: 'Колибри',
-        price: 2500,
-        image: 'https://i.pinimg.com/originals/79/41/33/7941338d13e7f69ef8cb7398b51736bc.jpg'
-    },
-    {
-        id: 12,
-        name: 'Колибри',
-        price: 2500,
-        image: 'https://i.pinimg.com/originals/79/41/33/7941338d13e7f69ef8cb7398b51736bc.jpg'
-    },
-    {
-        id: 13,
-        name: 'Колибри',
-        price: 2500,
-        image: 'https://i.pinimg.com/originals/79/41/33/7941338d13e7f69ef8cb7398b51736bc.jpg'
-    },
-    {
-        id: 14,
-        name: 'Колибри',
-        price: 2500,
-        image: 'https://i.pinimg.com/originals/79/41/33/7941338d13e7f69ef8cb7398b51736bc.jpg'
     }
+    
 
 ]

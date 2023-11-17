@@ -17,6 +17,7 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import {IconButton, useMediaQuery } from "@mui/material";
 import {useThem} from '../ThemeContext'
 import {useNavigate } from "react-router-dom";
+import { ICake } from "../../assets/types/cake.interface";
 
 export const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
@@ -48,12 +49,7 @@ export function Copyright() {
     );
   }
 
-  interface Cake {
-    id: number;
-    name: string;
-    photo: string;
-    price: number;
-  }
+
 
 
 const Home = () => {
@@ -66,14 +62,15 @@ const Home = () => {
   const navigate = useNavigate()
 
 
-  const [cakes, setCakes] = useState<Cake[]>([]);
+  const [cakes, setCakes] = useState<ICake[]>([]);
+
   useEffect(() => {
     fetch('http://localhost:3001/cakes') // Обращаемся к нашему API
       .then((response) => response.json())
       .then((data) => setCakes(data))
       .catch((error) => console.error('Ошибка при получении тортов:', error));
   }, []);
-  console.log(cakes)
+  
 
   
 
@@ -88,7 +85,7 @@ const Home = () => {
    },[])
 
 
-   function ThemeButton() 
+  function ThemeButton() 
   {
     const theme = useTheme();
     const colorMode = React.useContext(ColorModeContext);
@@ -154,7 +151,7 @@ const theme = React.useMemo(
           <Box sx={{ ml: 4 , py: 2, bgcolor: 'background.default', width: '100%',
             color: 'text.primary' } }>
           <Grid container spacing={4}>
-            {cake.length? (cake.map(cake => <CakeItem key = {cake.id} cake={cake}/>
+            {cakes.length? (cakes.map(cake => <CakeItem key = {cake.id} cake={cake}/>
             ))
             : <p>there are no cakes</p>
             }

@@ -37,50 +37,57 @@ const CakeDetail =() =>{
         </Box>
       );
     }
-    
-  const colorMode = React.useMemo(
-    () => ({
-      toggleColorMode: () => {
-        console.log(isDarkTheme);
-        setMode(isDarkTheme ? 'light' : 'dark');
-      },
-    }),
-    [isDarkTheme,],
-  );
-
-  const theme = React.useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode,
-        },
-      }),
-    [mode],
-  );
-
-  useEffect(() => {
-    
-    const isAuthenticated:string | null = localStorage.getItem('isAuthenticated')
-
-    if (isAuthenticated !== 'true') {
-      navigate('/') 
-    }
-
-   },[])
 
     useEffect(() => {
-        if(!id) return
-
-        async function fetchData() {
-            const data = await CakeService.FiltredCake(parseInt(id as string,10))
-            setCake(data)
+      const fetchCakeDetails = async () => {
+        try {
+          const response = await fetch(`http://localhost:3001/cakes/${id}`);
+          if (!response.ok) {
+            throw new Error('Торт не найден');
+          }
+  
+          const data = await response.json();
+          setCake(data);
+          console.log(data)
+        } catch (error) {
+          console.error('Ошибка при получении данных о торте:');
         }
-        fetchData()
-
+      };
+  
+      fetchCakeDetails();
     }, [id]);
+    
+    const colorMode = React.useMemo(
+      () => ({
+        toggleColorMode: () => {
+          console.log(isDarkTheme);
+          setMode(isDarkTheme ? 'light' : 'dark');
+        },
+      }),
+      [isDarkTheme,],
+    );
+
+    const theme = React.useMemo(
+      () =>
+        createTheme({
+          palette: {
+            mode,
+          },
+        }),
+      [mode],
+    );
+
+    useEffect(() => {
+      
+      const isAuthenticated:string | null = localStorage.getItem('isAuthenticated')
+
+      if (isAuthenticated !== 'true') {
+        navigate('/') 
+      }
+
+    },[])
 
     if (!cake) return <p>Loading ...</p>
-    console.log(defaultTheme)
     return <>
     <ThemeProvider theme={defaultTheme}>
             <CssBaseline />

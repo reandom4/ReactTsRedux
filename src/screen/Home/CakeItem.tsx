@@ -23,9 +23,8 @@ interface CakeItemProps {
 interface RootState {
   favorites: ICake[]
 }
-function CakeItem({cake}:CakeItemProps){
 
-    
+function CakeItem({cake}:CakeItemProps){
     const favorites = useSelector((state:RootState) => state.favorites)
     const dispatch = useDispatch()
     const isExist = favorites.some((r: { id: number; }) => r.id === cake.id)
