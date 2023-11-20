@@ -26,66 +26,74 @@ const defaultTheme = createTheme();
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     props,
     ref,
-  ) {
+    ) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-  });
+    });
 
-export default function SignIn() {
+
+export default function SignUp() {
     
     const [error, setError] = useState<boolean>(false);
     const navigate = useNavigate()
     const [open, setOpen] = useState(false);
-
-
-     
-
+    const [sucopen, setsucOpen] = useState(false);
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
         return;
         }
-
-    setOpen(false);
+        setOpen(false);
     };
 
-    function isValidEmail(email: string| null) {
-        if (email === null) {
-            return false;
-        }
-        return /\S+@\S+\.\S+/.test(email);
-      }
+
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const uname = data.get('email');
     const pass = data.get('password')
-    try {
-      const response = await axios.post('http://localhost:3001/login', {
-        username: uname,
-        password: pass
-      });
-      const { token } = response.data;
-      localStorage.setItem('token',token);
-      navigate('/Cake') 
-    } catch (error) {
-      console.error('Login failed:', (error as any).response.data.error);
-      setError(true);
-      setOpen(true);
+    if (!isValidEmail(uname as string))
+    {
+        setError(true);
+        setOpen(true);
+        return
     }
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+        fetch('http://localhost:3001/register', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username: uname, password: pass}),
+          })
+            .then((response) => response.json())
+            .catch(error => {console.error('Ошибка при добавлении пользователя:', error);
+            setError(true);
+            setOpen(true);
+        })
+        setsucOpen(true);
   };
+
+  function isValidEmail(email: string| null) {
+    if (email === null) {
+        return false;
+    }
+    return /\S+@\S+\.\S+/.test(email);
+  }
 
 
   return (
     <ThemeProvider theme={defaultTheme}>
-         <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical:'top', horizontal:'center' }}>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical:'top', horizontal:'center' }}>
         <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-          Incorrect login or password
+          Incorrect email
         </Alert>
-      </Snackbar>
+
+        </Snackbar>
+        <Snackbar open={sucopen} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical:'top', horizontal:'center' }}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          Success
+        </Alert>
+
+        </Snackbar>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -100,7 +108,7 @@ export default function SignIn() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign up
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -123,10 +131,6 @@ export default function SignIn() {
               id="password"
               autoComplete="current-password"
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
            
             <Button
               type="submit"
@@ -134,17 +138,15 @@ export default function SignIn() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Sign Up
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
+                
               </Grid>
               <Grid item>
-                <Link href="/registration" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                <Link href="/" variant="body2">
+                  {"Already have an account? Sign In"}
                 </Link>
               </Grid>
             </Grid>

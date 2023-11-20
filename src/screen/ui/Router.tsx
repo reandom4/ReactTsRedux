@@ -3,6 +3,7 @@ import { useEffect, useState, ReactElement } from "react";
 import Home from "../Home/Home";
 import CakeDetail from "../CakeDetail/CakeDetail";
 import SignIn from "../SignIn/SignIn";
+import SignUp from "../Signup/SignUp";
 
 interface PrivateRouteProps {
   element: ReactElement;
@@ -32,6 +33,7 @@ const Router = () => {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<SignIn />} />
+        <Route path='/registration' element={<SignUp/>}/>
         <Route
           path='/cake'
           element={<PrivateRoute element={<Home />} isAuthenticated={isAuthenticated} />}
