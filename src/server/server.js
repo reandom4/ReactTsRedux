@@ -6,6 +6,8 @@ const jwt = require('jsonwebtoken');
 const app = express();
 const port = 3001;
 const secretKey = 'secretkey';
+const bcrypt = require('bcrypt'); 
+const saltRounds = 10;
 const corsOptions = {
   origin: 'http://localhost:3000', // Replace with the actual origin of your React app
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -120,10 +122,11 @@ app.delete('/cakes/:id', (req, res) => {
 });
 
 
-app.post('/register', (req, res) => {
+app.post('/register', async (req, res) => {
   const { username, password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, saltRounds); 
 
-  db.run('INSERT INTO users (username, password) VALUES (?, ?)', [username, password], (err) => {
+  db.run('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashedPassword], (err) => {
       if (err) {
           return res.status(500).json({ error: 'Failed to register user' });
       }
@@ -132,17 +135,26 @@ app.post('/register', (req, res) => {
 });
 
 // Аутентификация пользователя и выдача токена
-app.post('/login', (req, res) => {
+app.post('/login', async(req, res) => {
   const { username, password } = req.body;
-
-  db.get('SELECT * FROM users WHERE username = ? AND password = ?', [username, password], (err, user) => {
+  try {
+  db.get('SELECT * FROM users WHERE username = ? ', [username], async (err, user) => {
       if (err || !user) {
           return res.status(401).json({ error: 'Invalid credentials' });
+      }
+
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (!passwordMatch) {
+        return res.status(401).json({ error: 'Invalid credentials' });
       }
 
       const token = jwt.sign({ userId: user.id, username: user.username }, secretKey, { expiresIn: '1h' });
       res.json({ token });
   });
+  } catch (error) {
+  console.error('Error during login:', error);
+  res.status(500).json({ error: 'Failed to login' });
+}
 });
 
 // Защищенный маршрут, требующий токен для доступа
