@@ -17,6 +17,7 @@ import {IconButton, useMediaQuery } from "@mui/material";
 import {useThem} from '../ThemeContext'
 import {useNavigate } from "react-router-dom";
 import { ICake } from "../../assets/types/cake.interface";
+import axios from 'axios';
 
 export const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
@@ -26,27 +27,25 @@ const Home = () => {
   const defaultTheme = createTheme();
   const {isDarkTheme, toggleTheme} = useThem();
   const [mode, setMode] = React.useState<'light' | 'dark'>(isDarkTheme? 'dark' : 'light');
-  const navigate = useNavigate()
+
 
 
   const [cakes, setCakes] = useState<ICake[]>([]);
 
+  const fetchCakes = async () => {
+    try {
+      const response = await axios.get('http://localhost:3001/cakes');
+      setCakes(response.data);
+    } catch (error) {
+      console.error('Ошибка при загрузке тортов:', (error as any).message);
+    }
+  };
+
   useEffect(() => {
-    fetch('http://localhost:3001/cakes') // Обращаемся к нашему API
-      .then((response) => response.json())
-      .then((data) => setCakes(data))
-      .catch((error) => console.error('Ошибка при получении тортов:', error));
+    fetchCakes()
   }, []);
   
-  useEffect(() => {
-    
-    const isAuthenticated:string | null = localStorage.getItem('isAuthenticated')
 
-    if (isAuthenticated !== 'true') {
-      navigate('/') 
-    }
-
-   },[])
 
   function ThemeButton() 
   {
@@ -114,9 +113,9 @@ const theme = React.useMemo(
           <Box sx={{ ml: 4 , py: 2, bgcolor: 'background.default', width: '100%',
             color: 'text.primary' } }>
           <Grid container spacing={4}>
-            {cakes.length? (cakes.map(cake => <CakeItem key = {cake.id} cake={cake}/>
+            {cakes.length? (cakes.map(cake => <CakeItem key = {cake.id} cake={cake} setCakes={setCakes} />
             ))
-            : <p>there are no cakes</p>
+            : <p>Loading....</p>
             }
           </Grid>
           </Box>

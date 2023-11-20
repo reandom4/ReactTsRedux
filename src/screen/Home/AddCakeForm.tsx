@@ -47,7 +47,6 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
         .catch((error) => console.error('Ошибка при добавлении торта:', error));
         reset()
         
-
     };
 
     return(

@@ -18,7 +18,7 @@ import { useEffect, useState } from 'react';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import React from 'react';
-
+import axios from 'axios';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -37,15 +37,6 @@ export default function SignIn() {
     const [open, setOpen] = useState(false);
 
 
-     useEffect(() => {
-      const isAuthenticated:string | null = localStorage.getItem('isAuthenticated')
-
-      if (isAuthenticated === 'true') {
-        navigate('/Cake') 
-      }
-  
-     },[])
-
      
 
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
@@ -63,18 +54,23 @@ export default function SignIn() {
         return /\S+@\S+\.\S+/.test(email);
       }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const email = data.get('email');
-    if(!isValidEmail(email as string)){
-        setError(true);
-        setOpen(true);
-    }
-    else{
-      localStorage.setItem('isAuthenticated','true');
-       navigate('/Cake') 
-       
+    const uname = data.get('email');
+    const pass = data.get('password')
+    try {
+      const response = await axios.post('http://localhost:3001/login', {
+        username: uname,
+        password: pass
+      });
+      const { token } = response.data;
+      localStorage.setItem('token',token);
+      navigate('/Cake') 
+    } catch (error) {
+      console.error('Login failed:', (error as any).response.data.error);
+      setError(true);
+      setOpen(true);
     }
     console.log({
       email: data.get('email'),

@@ -8,6 +8,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { ICake } from "../../assets/types/cake.interface";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import LogoutIcon from '@mui/icons-material/Logout';
 
 type Anchor = 'left';
 
@@ -101,7 +102,7 @@ export function  LeftMenu  ({setCake}:{setCake: (newCakes: (prev: ICake[]) => IC
               <ListItem disablePadding>
                 <ListItemButton onClick={back}>
                   <ListItemIcon>
-                    {<FavoriteBorderIcon/>}
+                    {<LogoutIcon/>}
                   </ListItemIcon>
                   <ListItemText primary={'Log out'} />
                 </ListItemButton>

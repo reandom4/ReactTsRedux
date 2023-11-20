@@ -2,9 +2,10 @@ const express = require('express');
 const sqlite3 = require('sqlite3');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-
+const jwt = require('jsonwebtoken');
 const app = express();
 const port = 3001;
+const secretKey = 'secretkey';
 const corsOptions = {
   origin: 'http://localhost:3000', // Replace with the actual origin of your React app
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -29,6 +30,11 @@ db.serialize(() => {
       image TEXT      
     )
   `);
+  db.run(`CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE,
+    password TEXT
+  );`)
 });
 
 // Endpoint для получения списка всех тортов
@@ -110,6 +116,48 @@ app.delete('/cakes/:id', (req, res) => {
     }
 
     res.status(200).json({ message: 'Торт удален успешно' });
+  });
+});
+
+app.post('/register', (req, res) => {
+  const { username, password } = req.body;
+
+  db.run('INSERT INTO users (username, password) VALUES (?, ?)', [username, password], (err) => {
+      if (err) {
+          return res.status(500).json({ error: 'Failed to register user' });
+      }
+      res.json({ message: 'User registered successfully' });
+  });
+});
+
+// Аутентификация пользователя и выдача токена
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+
+  db.get('SELECT * FROM users WHERE username = ? AND password = ?', [username, password], (err, user) => {
+      if (err || !user) {
+          return res.status(401).json({ error: 'Invalid credentials' });
+      }
+
+      const token = jwt.sign({ userId: user.id, username: user.username }, secretKey, { expiresIn: '1h' });
+      res.json({ token });
+  });
+});
+
+// Защищенный маршрут, требующий токен для доступа
+app.get('/protected', (req, res) => {
+  const token = req.headers.authorization;
+
+  if (!token) {
+      return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  jwt.verify(token, secretKey, (err, decoded) => {
+      if (err) {
+          return res.status(401).json({ error: 'Invalid token' });
+      }
+
+      res.json({ message: 'Welcome to the protected route', user: decoded });
   });
 });
 

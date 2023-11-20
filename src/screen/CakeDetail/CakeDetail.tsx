@@ -2,14 +2,12 @@ import CakeItem from "../Home/CakeItem";
 import {useEffect, useState} from "react";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {ICake} from "../../assets/types/cake.interface";
-import { CakeService } from "./cake.service";
 import Appbar from '@mui/material/AppBar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { LeftMenu } from "../Home/LeftMenu";
 import { Box, Button, IconButton, useTheme } from "@mui/material";
 import { ColorModeContext } from "../Home/Home";
 import React from 'react';
@@ -21,10 +19,10 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 const CakeDetail =() =>{
     const {id} = useParams<string>()
     const [cake, setCake] = useState<ICake>()
+    const [cakes, setCakes] = useState<ICake[]>([]);
     const defaultTheme = createTheme();
     const {isDarkTheme, toggleTheme} = useThem();
     const [mode, setMode] = React.useState<'light' | 'dark'>(isDarkTheme? 'dark' : 'light');
-    const navigate = useNavigate()
     
     function ThemeButton() {
       const theme = useTheme();
@@ -76,15 +74,6 @@ const CakeDetail =() =>{
       [mode],
     );
 
-    useEffect(() => {
-      
-      const isAuthenticated:string | null = localStorage.getItem('isAuthenticated')
-
-      if (isAuthenticated !== 'true') {
-        navigate('/') 
-      }
-
-    },[])
 
     if (!cake) return <p>Loading ...</p>
     return <>
@@ -109,11 +98,11 @@ const CakeDetail =() =>{
             </Appbar>
             <Box sx ={{bgcolor: 'background.default',minHeight: '100vh'}}>
             <Box>
-            <Link to='/'><Button>Back</Button> </Link>
+            <Link to='/Cake'><Button>Back</Button> </Link>
             </Box>
         
         <Grid container spacing={2} >
-        <CakeItem cake={cake}/>
+        <CakeItem cake={cake} setCakes={setCakes}/>
         </Grid>
         </Box>
         </ThemeProvider>
