@@ -13,7 +13,9 @@ function SearchCake({setCakes,cakeName,n1,n2}:CakeSearchProps) {
     const fetchData = async () => {
     try {
         const response = await axios.get(`http://localhost:3001/searchcakes/${cakeName}`, {
-            
+            params: {
+                cakename: cakeName,
+              },
         });
         setCakes(response.data)
         console.log(response.data)

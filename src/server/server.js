@@ -51,13 +51,24 @@ app.get('/cakes', (req, res) => {
     res.status(200).json(rows);
   });
 });
+app.get('/searchcakes', (req, res) => {
+  db.all('SELECT * FROM cakes', (err, rows) => {
+    if (err) {
+      console.error(err.message);
+      return res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+    }
+
+    res.status(200).json(rows);
+  });
+});
 
 // Endpoint для получения списка всех тортов из поиска
 app.get('/searchcakes/:cakename', (req, res) => {
   const { cakename } = req.params;
+  const {cakename2} = req.body;
   if (cakename === undefined || cakename.trim() === '') {
     return res.status(400).json({ error: 'Invalid cakename parameter' });
-  }
+  } 
   console.log(cakename)
 
   const query = cakename
