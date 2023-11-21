@@ -13,13 +13,56 @@ import { LeftMenu } from "./LeftMenu";
 import {useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import {IconButton, useMediaQuery } from "@mui/material";
+import {alpha, IconButton, InputBase, styled, useMediaQuery } from "@mui/material";
 import {useThem} from '../ThemeContext'
 import {useNavigate } from "react-router-dom";
 import { ICake } from "../../assets/types/cake.interface";
 import axios from 'axios';
+import SearchIcon from '@mui/icons-material/Search';
+import SearchCake from "./SearchCake";
 
 export const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
+
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginRight: theme.spacing(2),
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(3),
+    width: 'auto',
+  },
+  
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '20ch',
+    },
+  },
+}));
 
 
 const Home = () => {
@@ -27,8 +70,6 @@ const Home = () => {
   const defaultTheme = createTheme();
   const {isDarkTheme, toggleTheme} = useThem();
   const [mode, setMode] = React.useState<'light' | 'dark'>(isDarkTheme? 'dark' : 'light');
-
-
 
   const [cakes, setCakes] = useState<ICake[]>([]);
 
@@ -45,8 +86,6 @@ const Home = () => {
     fetchCakes()
   }, []);
   
-
-
   function ThemeButton() 
   {
     const theme = useTheme();
@@ -79,7 +118,13 @@ const theme = React.useMemo(
     }),
   [mode],
 );
-    
+
+
+const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  
+  SearchCake({ setCakes, cakeName: event.target.value, n1:1,n2:2 })
+  // Дополнительные действия при изменении значения ввода
+};
 
   return (
       <>
@@ -99,7 +144,16 @@ const theme = React.useMemo(
                   >
                       Cake cataloge
                   </Typography>
-                  
+                  <Search>
+                  <SearchIconWrapper>
+                    <SearchIcon />
+                  </SearchIconWrapper>
+                  <StyledInputBase
+                    placeholder="Search…"
+                    inputProps={{ 'aria-label': 'search' }}
+                    onChange ={handleChange}
+                  />
+                  </Search>
                   <Box sx={{flexGrow:0}}>
                     <AddCakeForm  setCake={setCakes}/>
                   </Box>

@@ -52,6 +52,29 @@ app.get('/cakes', (req, res) => {
   });
 });
 
+// Endpoint для получения списка всех тортов из поиска
+app.get('/searchcakes/:cakename', (req, res) => {
+  const { cakename } = req.params;
+  if (cakename === undefined || cakename.trim() === '') {
+    return res.status(400).json({ error: 'Invalid cakename parameter' });
+  }
+  console.log(cakename)
+
+  const query = cakename
+    ? 'SELECT * FROM cakes WHERE name LIKE ? || "%"'
+    : 'SELECT * FROM cakes';
+  // Получение данных из базы данных
+  const params = cakename ? [cakename] : [];
+  db.all(query, params, (err, rows) => {
+    if (err) {
+      console.error(err.message);
+      return res.status(500).json({ error: 'Внутренняя ошибка сервера' });
+    }
+
+    res.status(200).json(rows);
+  });
+});
+
 // Endpoint для добавления нового торта
 app.post('/addcakes', (req, res) => {
   const { name, price, image } = req.body;
