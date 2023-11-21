@@ -20,6 +20,7 @@ import { ICake } from "../../assets/types/cake.interface";
 import axios from 'axios';
 import SearchIcon from '@mui/icons-material/Search';
 import SearchCake from "./SearchCake";
+import Pagination from '@mui/material/Pagination';
 
 export const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
@@ -174,6 +175,12 @@ const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
           </Grid>
           </Box>
           </Box>
+          <Box sx={{flexGrow:1}}><Pagination count={10} variant="outlined" color="secondary" /></Box>
+          <Box        
+          sx={{flexGrow:0}}>
+          <Pagination count={10} variant="outlined" color="secondary" />
+          </Box>
+          <Box sx={{flexGrow:1}}/>
           </ThemeProvider>
           </ColorModeContext.Provider>
 
