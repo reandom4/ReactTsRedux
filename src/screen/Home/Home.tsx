@@ -13,7 +13,7 @@ import { LeftMenu } from "./LeftMenu";
 import {useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import {alpha, IconButton, InputBase, styled, useMediaQuery } from "@mui/material";
+import {alpha, IconButton, InputBase, Stack, styled, useMediaQuery } from "@mui/material";
 import {useThem} from '../ThemeContext'
 import {useNavigate } from "react-router-dom";
 import { ICake } from "../../assets/types/cake.interface";
@@ -73,11 +73,32 @@ const Home = () => {
   const [mode, setMode] = React.useState<'light' | 'dark'>(isDarkTheme? 'dark' : 'light');
 
   const [cakes, setCakes] = useState<ICake[]>([]);
+  const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState(1);
+  const itemperpage = 3;
+
 
   const fetchCakes = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/cakes');
+      const response = await axios.get('http://localhost:3001/cakes',{
+        params: {
+          limit: itemperpage,
+          offset: (page -1) * 3 ,
+        },
+      });
       setCakes(response.data);
+    } catch (error) {
+      console.error('Ошибка при загрузке тортов:', (error as any).message);
+    }
+  };
+
+  const getcount = async () => {
+    try {
+      const response = await axios.get('http://localhost:3001/countcakes',{
+      });
+      const pages = response.data['count(*)']
+      const pagecount = Math.ceil(pages / itemperpage)
+      setPageCount(pagecount);
     } catch (error) {
       console.error('Ошибка при загрузке тортов:', (error as any).message);
     }
@@ -85,7 +106,8 @@ const Home = () => {
 
   useEffect(() => {
     fetchCakes()
-  }, []);
+    getcount() 
+  }, [page]);
   
   function ThemeButton() 
   {
@@ -121,10 +143,13 @@ const theme = React.useMemo(
 );
 
 
-const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  
+
+  const onPageChange = (event: React.ChangeEvent<unknown>, newPage: number) => {
+    setPage(newPage);
+  };
+
+const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => { 
   SearchCake({ setCakes, cakeName: event.target.value, n1:1,n2:2 })
-  // Дополнительные действия при изменении значения ввода
 };
 
   return (
@@ -175,17 +200,14 @@ const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
           </Grid>
           </Box>
           </Box>
-          <Box sx={{flexGrow:1}}><Pagination count={10} variant="outlined" color="secondary" /></Box>
-          <Box        
-          sx={{flexGrow:0}}>
-          <Pagination count={10} variant="outlined" color="secondary" />
-          </Box>
-          <Box sx={{flexGrow:1}}/>
-          </ThemeProvider>
+          <Stack alignItems="center">
+          <Pagination count={pageCount} variant="outlined" color="secondary" onChange={(e,newpage) => onPageChange(e, newpage)}/>
+          </Stack>
+          </ThemeProvider>  
           </ColorModeContext.Provider>
 
           </ThemeProvider>
       </>
   )
 }
-export default Home
+export default Home 
