@@ -4,17 +4,19 @@ import { ICake } from "../../assets/types/cake.interface";
 interface CakeSearchProps {
     setCakes: React.Dispatch<React.SetStateAction<ICake[]>>;
     cakeName: string;
-    n1: number;
-    n2: number;
+    limit: number;
+    offset: number;
 }
 
-function SearchCake({setCakes,cakeName,n1,n2}:CakeSearchProps) {
+function SearchCake({setCakes,cakeName,limit,offset}:CakeSearchProps) {
     
     const fetchData = async () => {
     try {
         const response = await axios.get(`http://localhost:3001/searchcakes/${cakeName}`, {
             params: {
                 cakename: cakeName,
+                limit: limit,
+                offset: (offset -1) * 3 
               },
         });
         setCakes(response.data)

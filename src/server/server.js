@@ -56,7 +56,11 @@ app.get('/cakes', (req, res) => {
 });
 
 app.get('/searchcakes', (req, res) => {
-  db.all('SELECT * FROM cakes', (err, rows) => {
+  const limit = req.query.limit ? parseInt(req.query.limit, 10) : 3;
+  const offset = req.query.offset ? parseInt(req.query.offset, 10) : 0;
+  const query = `SELECT * FROM cakes LIMIT ${limit} OFFSET ${offset}`;
+  db.all(query, (err, rows) => {
+    
     if (err) {
       console.error(err.message);
       return res.status(500).json({ error: 'Внутренняя ошибка сервера' });
@@ -69,10 +73,12 @@ app.get('/searchcakes', (req, res) => {
 // Endpoint для получения списка всех тортов из поиска
 app.get('/searchcakes/:cakename', (req, res) => {
   const { cakename } = req.params;
+  const limit = req.query.limit ? parseInt(req.query.limit, 10) : 3;
+  const offset = req.query.offset ? parseInt(req.query.offset, 10) : 0;
   if (cakename === undefined || cakename.trim() === '') {
     return res.status(400).json({ error: 'Invalid cakename parameter' });
   } 
-  const query = 'SELECT * FROM cakes WHERE name LIKE ? || "%"';
+  const query = `SELECT * FROM cakes WHERE name LIKE ? || "%" LIMIT ${limit} OFFSET ${offset}`;
   // Получение данных из базы данных
   const params = cakename ? [cakename] : [];
   db.all(query, params, (err, rows) => {
@@ -103,10 +109,10 @@ app.get('/countcakes/:cakename', (req, res) => {
   if (cakename === undefined || cakename.trim() === '') {
     return res.status(400).json({ error: 'Invalid cakename parameter' });
   } 
-  const query = 'SELECT * FROM cakes WHERE name LIKE ? || "%"';
+  const query = 'SELECT count(*) FROM cakes WHERE name LIKE ? || "%"';
   // Получение данных из базы данных
   const params = cakename ? [cakename] : [];
-  db.all(query, params, (err, rows) => {
+  db.get(query, params, (err, rows) => {
     if (err) {
       console.error(err.message);
       return res.status(500).json({ error: 'Внутренняя ошибка сервера' });

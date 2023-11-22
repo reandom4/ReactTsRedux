@@ -1,26 +1,21 @@
-import {cakes as cakeData} from "./Cake.data";
-import {useEffect, useState} from "react";
-import CakeItem from './CakeItem'
-import AddCakeForm from "./AddCakeForm";
-import Appbar from '@mui/material/AppBar';
-import CssBaseline from '@mui/material/CssBaseline';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import * as React from 'react';
+import { useEffect, useState } from "react";
+import axios from 'axios';
+
+import { ICake } from "../../assets/types/cake.interface";
+import CakeItem from './CakeItem';
+import AddCakeForm from "./AddCakeForm";
+import SearchCake from "./SearchCake";
 import { LeftMenu } from "./LeftMenu";
-import {useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
+import { useThem } from '../ThemeContext';
+
+import Appbar from '@mui/material/AppBar';
+import {Box, Grid, CssBaseline, Toolbar,Typography, alpha, IconButton, InputBase, Stack, styled, Pagination} from '@mui/material';
+import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import {alpha, IconButton, InputBase, Stack, styled, useMediaQuery } from "@mui/material";
-import {useThem} from '../ThemeContext'
-import {useNavigate } from "react-router-dom";
-import { ICake } from "../../assets/types/cake.interface";
-import axios from 'axios';
 import SearchIcon from '@mui/icons-material/Search';
-import SearchCake from "./SearchCake";
-import Pagination from '@mui/material/Pagination';
+
 
 export const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
@@ -38,7 +33,6 @@ const Search = styled('div')(({ theme }) => ({
     marginLeft: theme.spacing(3),
     width: 'auto',
   },
-  
 }));
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
@@ -65,25 +59,23 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-
 const Home = () => {
 
   const defaultTheme = createTheme();
-  const {isDarkTheme, toggleTheme} = useThem();
-  const [mode, setMode] = React.useState<'light' | 'dark'>(isDarkTheme? 'dark' : 'light');
+  const { isDarkTheme, toggleTheme } = useThem();
+  const [mode, setMode] = React.useState<'light' | 'dark'>(isDarkTheme ? 'dark' : 'light');
 
   const [cakes, setCakes] = useState<ICake[]>([]);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(1);
   const itemperpage = 3;
 
-
   const fetchCakes = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/cakes',{
+      const response = await axios.get('http://localhost:3001/cakes', {
         params: {
           limit: itemperpage,
-          offset: (page -1) * 3 ,
+          offset: (page - 1) * 3,
         },
       });
       setCakes(response.data);
@@ -92,9 +84,12 @@ const Home = () => {
     }
   };
 
-  const getcount = async () => {
+  const getcount = async (val = "") => {
     try {
-      const response = await axios.get('http://localhost:3001/countcakes',{
+      const response = await axios.get(`http://localhost:3001/countcakes/${val}`, {
+        params: {
+          cakename: val
+        },
       });
       const pages = response.data['count(*)']
       const pagecount = Math.ceil(pages / itemperpage)
@@ -106,108 +101,107 @@ const Home = () => {
 
   useEffect(() => {
     fetchCakes()
-    getcount() 
+    getcount()
+    // eslint-disable-next-line
   }, [page]);
-  
-  function ThemeButton() 
-  {
+
+  function ThemeButton() {
     const theme = useTheme();
     const colorMode = React.useContext(ColorModeContext);
     return (
       <Box>
-        <IconButton sx={{ ml: 1 }} onClick={() => { colorMode.toggleColorMode(); toggleTheme(); }}  color="inherit">
+        <IconButton sx={{ ml: 1 }} onClick={() => { colorMode.toggleColorMode(); toggleTheme(); }} color="inherit">
           {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
         </IconButton>
       </Box>
     );
   }
-  
-const colorMode = React.useMemo(
-  () => ({
-    toggleColorMode: () => {
-      console.log(isDarkTheme);
-      setMode(isDarkTheme ? 'light' : 'dark');
-    },
-  }),
-  [isDarkTheme,],
-);
 
-const theme = React.useMemo(
-  () =>
-    createTheme({
-      palette: {
-        mode,
+  const colorMode = React.useMemo(
+    () => ({
+      toggleColorMode: () => {
+        console.log(isDarkTheme);
+        setMode(isDarkTheme ? 'light' : 'dark');
       },
     }),
-  [mode],
-);
+    [isDarkTheme],
+  );
 
-
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode],
+  );
 
   const onPageChange = (event: React.ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage);
   };
 
-const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => { 
-  SearchCake({ setCakes, cakeName: event.target.value, n1:1,n2:2 })
-};
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    SearchCake({ setCakes, cakeName: event.target.value, limit: itemperpage, offset: (page - 1) * 3 })
+    console.log(event.target)
+    getcount(event.target.value)
+  };
 
   return (
-      <>
-          <ThemeProvider theme={defaultTheme}>
-          <CssBaseline />
-          <ColorModeContext.Provider value={colorMode}>
-                      <ThemeProvider theme={theme}>
-          <Appbar position="static">
+    <>
+      <ThemeProvider theme={defaultTheme}>
+        <CssBaseline />
+        <ColorModeContext.Provider value={colorMode}>
+          <ThemeProvider theme={theme}>
+            <Appbar position="static">
               <Toolbar>
-                  
-                  <LeftMenu setCake={setCakes}/>
-                  <Typography variant="h6" 
-                  color="inherit" 
-                  noWrap 
-                  component="div" 
+
+                <LeftMenu setCake={setCakes} />
+                <Typography variant="h6"
+                  color="inherit"
+                  noWrap
+                  component="div"
                   sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-                  >
-                      Cake cataloge
-                  </Typography>
-                  <Search>
+                >
+                  Cake cataloge
+                </Typography>
+                <Search>
                   <SearchIconWrapper>
                     <SearchIcon />
                   </SearchIconWrapper>
                   <StyledInputBase
                     placeholder="Search…"
                     inputProps={{ 'aria-label': 'search' }}
-                    onChange ={handleChange}
+                    onChange={handleChange}
                   />
-                  </Search>
-                  <Box sx={{flexGrow:0}}>
-                    <AddCakeForm  setCake={setCakes}/>
-                  </Box>
-                  <Box>
-                    <ThemeButton />
-                  </Box>
+                </Search>
+                <Box sx={{ flexGrow: 0 }}>
+                  <AddCakeForm setCake={setCakes} />
+                </Box>
+                <Box>
+                  <ThemeButton />
+                </Box>
               </Toolbar>
-          </Appbar>
+            </Appbar>
 
-          <Box sx ={{bgcolor: 'background.default'}}>
-          <Box sx={{ ml: 4 , py: 2, bgcolor: 'background.default', width: '100%',
-            color: 'text.primary' } }>
-          <Grid container spacing={4}>
-            {cakes.length? (cakes.map(cake => <CakeItem key = {cake.id} cake={cake} setCakes={setCakes} />
-            ))
-            : <p>Loading....</p>
-            }
-          </Grid>
-          </Box>
-          </Box>
-          <Stack alignItems="center">
-          <Pagination count={pageCount} variant="outlined" color="secondary" onChange={(e,newpage) => onPageChange(e, newpage)}/>
-          </Stack>
-          </ThemeProvider>  
-          </ColorModeContext.Provider>
-
+            <Box sx={{ bgcolor: 'background.default' }}>
+              <Box sx={{ ml: 4, py: 2, bgcolor: 'background.default', width: '100%', color: 'text.primary' }}>
+                <Grid container spacing={4}>
+                  {cakes.length ? (
+                    cakes.map(cake => <CakeItem key={cake.id} cake={cake} setCakes={setCakes} />)
+                  ) : (
+                    <p></p>
+                  )}
+                </Grid>
+              </Box>
+            </Box>
+            <Stack alignItems="center">
+              <Pagination count={pageCount} variant="outlined" color="secondary" onChange={(e, newpage) => onPageChange(e, newpage)} />
+            </Stack>
           </ThemeProvider>
-      </>
+        </ColorModeContext.Provider>
+      </ThemeProvider>
+    </>
   )
 }
 export default Home 
