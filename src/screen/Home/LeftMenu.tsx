@@ -64,6 +64,7 @@ export function  LeftMenu  ({setCake}:{setCake: (newCakes: (prev: ICake[]) => IC
     const back = () => {
       navigate('/') 
       localStorage.setItem('isAuthenticated','false');
+      localStorage.setItem('token', '');
     }
 
       const list = () => (
