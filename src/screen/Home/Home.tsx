@@ -183,21 +183,22 @@ const Home = () => {
                 </Box>
               </Toolbar>
             </Appbar>
-
-            <Box sx={{ bgcolor: 'background.default' }}>
-              <Box sx={{ ml: 4, py: 2, bgcolor: 'background.default', width: '100%', color: 'text.primary' }}>
-                <Grid container spacing={4}>
-                  {cakes.length ? (
-                    cakes.map(cake => <CakeItem key={cake.id} cake={cake} setCakes={setCakes} />)
-                  ) : (
-                    <p></p>
-                  )}
-                </Grid>
+            <Box sx={{ bgcolor: 'background.default', minHeight:'91vh'}}>
+              <Box sx={{ bgcolor: 'background.default' }}>
+                <Box sx={{ pl: 4, pr: 4, py: 2, bgcolor: 'background.default', width: '100%', color: 'text.primary' }}>
+                  <Grid container spacing={3}>
+                    {cakes.length ? (
+                      cakes.map(cake => <CakeItem key={cake.id} cake={cake} setCakes={setCakes} />)
+                    ) : (
+                      <p></p>
+                    )}
+                  </Grid>
+                </Box>
               </Box>
+              <Stack alignItems="center">
+                <Pagination count={pageCount} variant="outlined" color="secondary" onChange={(e, newpage) => onPageChange(e, newpage)} />
+              </Stack>
             </Box>
-            <Stack alignItems="center">
-              <Pagination count={pageCount} variant="outlined" color="secondary" onChange={(e, newpage) => onPageChange(e, newpage)} />
-            </Stack>
           </ThemeProvider>
         </ColorModeContext.Provider>
       </ThemeProvider>
