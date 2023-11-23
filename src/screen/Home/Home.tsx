@@ -67,21 +67,12 @@ const Home = () => {
 
   const [cakes, setCakes] = useState<ICake[]>([]);
   const [page, setPage] = useState(1);
-  const [pageCount, setPageCount] = useState(1);
+  const [pageCount, setPageCount] = useState<number>(1);
+  const [cakeName, setCakeName] = useState<string>('');
   const itemperpage = 3;
 
   const fetchCakes = async () => {
-    try {
-      const response = await axios.get('http://localhost:3001/cakes', {
-        params: {
-          limit: itemperpage,
-          offset: (page - 1) * 3,
-        },
-      });
-      setCakes(response.data);
-    } catch (error) {
-      console.error('Ошибка при загрузке тортов:', (error as any).message);
-    }
+    SearchCake({ setCakes, cakeName: cakeName, limit: itemperpage, offset: page})
   };
 
   const getcount = async (val = "") => {
@@ -139,12 +130,15 @@ const Home = () => {
 
   const onPageChange = (event: React.ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage);
+    
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    SearchCake({ setCakes, cakeName: event.target.value, limit: itemperpage, offset: (page - 1) * 3 })
-    console.log(event.target)
+    SearchCake({ setCakes, cakeName: event.target.value, limit: itemperpage, offset: page })
+    setCakeName(event.target.value)
+    
     getcount(event.target.value)
+    setPage(1)
   };
 
   return (
@@ -156,7 +150,7 @@ const Home = () => {
             <Appbar position="static">
               <Toolbar>
 
-                <LeftMenu setCake={setCakes} />
+                <LeftMenu setCake={setCakes} setPageCount={setPageCount} setPage={setPage}/>
                 <Typography variant="h6"
                   color="inherit"
                   noWrap
@@ -196,7 +190,7 @@ const Home = () => {
                 </Box>
               </Box>
               <Stack alignItems="center">
-                <Pagination count={pageCount} variant="outlined" color="secondary" onChange={(e, newpage) => onPageChange(e, newpage)} />
+                <Pagination page={page} count={pageCount} variant="outlined" color="secondary" onChange={(e, newpage) => onPageChange(e, newpage)} />
               </Stack>
             </Box>
           </ThemeProvider>

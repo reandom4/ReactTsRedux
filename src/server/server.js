@@ -44,6 +44,7 @@ app.get('/cakes', (req, res) => {
   const limit = req.query.limit ? parseInt(req.query.limit, 10) : 3;
   const offset = req.query.offset ? parseInt(req.query.offset, 10) : 0;
   const sqlQuery = `SELECT * FROM cakes LIMIT ${limit} OFFSET ${offset}`;
+  console.log(sqlQuery);
   // Получение данных из базы данных
   db.all(sqlQuery, (err, rows) => {
     if (err) {
@@ -59,13 +60,14 @@ app.get('/searchcakes', (req, res) => {
   const limit = req.query.limit ? parseInt(req.query.limit, 10) : 3;
   const offset = req.query.offset ? parseInt(req.query.offset, 10) : 0;
   const query = `SELECT * FROM cakes LIMIT ${limit} OFFSET ${offset}`;
+  console.log(query);
   db.all(query, (err, rows) => {
     
     if (err) {
       console.error(err.message);
       return res.status(500).json({ error: 'Внутренняя ошибка сервера' });
     }
-
+    
     res.status(200).json(rows);
   });
 });
@@ -75,10 +77,12 @@ app.get('/searchcakes/:cakename', (req, res) => {
   const { cakename } = req.params;
   const limit = req.query.limit ? parseInt(req.query.limit, 10) : 3;
   const offset = req.query.offset ? parseInt(req.query.offset, 10) : 0;
+  
   if (cakename === undefined || cakename.trim() === '') {
     return res.status(400).json({ error: 'Invalid cakename parameter' });
   } 
   const query = `SELECT * FROM cakes WHERE name LIKE ? || "%" LIMIT ${limit} OFFSET ${offset}`;
+  console.log(query);
   // Получение данных из базы данных
   const params = cakename ? [cakename] : [];
   db.all(query, params, (err, rows) => {
@@ -140,6 +144,46 @@ app.post('/addcakes', (req, res) => {
       res.status(201).json({ message: 'Торт добавлен успешно' });
     }
   );
+});
+
+app.post('/addcakess', (req, res) => {
+  const cakesToAdd = req.body;
+  console.log('Received request:', req.body);
+
+  if (!Array.isArray(cakesToAdd) || cakesToAdd.length === 0) {
+    return res.status(400).json({ error: 'Invalid request body' });
+  }
+
+  // Using a transaction for better performance and atomicity
+  db.serialize(() => {
+    db.run('BEGIN TRANSACTION');
+
+    const placeholders = cakesToAdd.map(() => '(?, ?, ?)').join(', ');
+
+    const query = `
+      INSERT INTO cakes (name, price, image)
+      VALUES ${placeholders}
+    `;
+
+    const values = cakesToAdd.flatMap(cake => [cake.name, cake.price, cake.image]);
+
+    db.run(query, values, (err) => {
+      if (err) {
+        console.error(err.message);
+        db.run('ROLLBACK'); // Rollback the transaction in case of an error
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
+
+      db.run('COMMIT', (commitErr) => {
+        if (commitErr) {
+          console.error(commitErr.message);
+          return res.status(500).json({ error: 'Error committing transaction' });
+        }
+
+        res.status(201).json({ message: 'Cakes added successfully' });
+      });
+    });
+  });
 });
 
 app.get('/cakes/:id', (req, res) => {

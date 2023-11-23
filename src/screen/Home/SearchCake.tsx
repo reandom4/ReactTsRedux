@@ -20,7 +20,6 @@ function SearchCake({setCakes,cakeName,limit,offset}:CakeSearchProps) {
               },
         });
         setCakes(response.data)
-        console.log(response.data)
       } catch (error) {
         console.error('Login failed:', (error as any).response.data.error);
       }

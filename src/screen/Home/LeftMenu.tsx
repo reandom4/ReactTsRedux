@@ -1,7 +1,5 @@
 import { Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import React from "react";
-import {cakes as cakeData} from "./Cake.data";
-
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -9,11 +7,12 @@ import { ICake } from "../../assets/types/cake.interface";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import LogoutIcon from '@mui/icons-material/Logout';
+import axios from "axios";
 
 type Anchor = 'left';
 
 
-export function  LeftMenu  ({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) => void})  {
+export function  LeftMenu  ({setCake,setPageCount,setPage}:{setPage:(newPage:(prev:number)=> number) => void, setPageCount:(newPage:(prev:number)=> number) => void, setCake: (newCakes: (prev: ICake[]) => ICake[]) => void})  {
 
   const navigate = useNavigate()
     const [state, setState] = React.useState({
@@ -50,10 +49,20 @@ export function  LeftMenu  ({setCake}:{setCake: (newCakes: (prev: ICake[]) => IC
         setCake(() => [
             ...favorites
         ]);
+        setPageCount(() => Math.ceil(favorites.length / 3))
         
     }
 
-    const showAll = () => {
+    const showAll = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/countcakes`, {
+        });
+        const pages = response.data['count(*)']
+        const pagecount = Math.ceil(pages / 3)
+        setPageCount(() => pagecount);
+      } catch (error) {
+        console.error('Ошибка при загрузке тортов:', (error as any).message);
+      }
         fetch('http://localhost:3001/cakes') // Обращаемся к нашему API
           .then((response) => response.json())
           .then((data) => setCake(data))
