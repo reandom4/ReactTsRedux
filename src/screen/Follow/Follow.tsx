@@ -56,7 +56,7 @@ const Follow = () => {
                 </Box>
               </Toolbar>
             </Appbar>
-            <Box sx={{ bgcolor: 'background.default', minHeight:'91vh'}}>
+            <Box sx={{ bgcolor: 'background.default', minHeight:'92.8vh'}}>
               <Box sx={{ bgcolor: 'background.default' }}>
                 <Box sx={{ pl: 4, pr: 4, py: 2, bgcolor: 'background.default', width: '100%', color: 'text.primary' }}>
                   <Grid container spacing={3}>

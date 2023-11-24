@@ -18,38 +18,39 @@ const CakeDetail =() =>{
     
     if (!cake) return <p>Loading ...</p>
 
-    return <>
+    return (
+    <>
     <ThemeProvider theme={defaultTheme}>
-            <CssBaseline />
-            <ColorModeContext.Provider value={colorMode}>
+        <CssBaseline />
+        <ColorModeContext.Provider value={colorMode}>
             <ThemeProvider theme={theme}>
-    <AppBar position="static">
-                <Toolbar>
-                    <Typography variant="h6" 
-                    color="inherit" 
-                    noWrap 
-                    component="div" 
-                    sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-                    >
+                <AppBar position="static">
+                    <Toolbar>
+                        <Typography variant="h6" 
+                        color="inherit" 
+                        noWrap 
+                        component="div" 
+                        sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+                        >
                         Cake cataloge
-                    </Typography>
-                    <Box>
+                        </Typography>
+                        <Box>
                           <ThemeButton toggleTheme={toggleTheme}/>
+                        </Box>
+                    </Toolbar>
+                </AppBar>
+                <Box sx ={{bgcolor: 'background.default',minHeight: '100vh'}}>
+                    <Box>
+                        <Link to='/Cake'><Button>Back</Button> </Link>
                     </Box>
-                </Toolbar>
-            </AppBar>
-            <Box sx ={{bgcolor: 'background.default',minHeight: '100vh'}}>
-            <Box>
-            <Link to='/Cake'><Button>Back</Button> </Link>
-            </Box>
-        
-        <Grid container spacing={2} >
-        <CakeItem cake={cake} setCakes={setCakes}/>
-        </Grid>
-        </Box>
-        </ThemeProvider>
-            </ColorModeContext.Provider>
+                    <Grid container spacing={2} >
+                        <CakeItem cake={cake} setCakes={setCakes}/>
+                    </Grid>
+                </Box>
+            </ThemeProvider>
+        </ColorModeContext.Provider>
     </ThemeProvider>
     </>
+    )
 }
 export default CakeDetail
