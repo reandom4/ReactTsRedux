@@ -1,87 +1,29 @@
 import CakeItem from "../Home/CakeItem";
-import {useEffect, useState} from "react";
-import {Link, useNavigate, useParams} from "react-router-dom";
+import {useState} from "react";
+import {Link, useParams} from "react-router-dom";
 import {ICake} from "../../assets/types/cake.interface";
-import Appbar from '@mui/material/AppBar';
-import CssBaseline from '@mui/material/CssBaseline';
-import Grid from '@mui/material/Grid';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Box, Button, IconButton, useTheme } from "@mui/material";
+import {AppBar,CssBaseline,Grid,Toolbar,Typography,Box, Button,createTheme,ThemeProvider} from '@mui/material';
 import { ColorModeContext } from "../Home/Home";
-import React from 'react';
-import {useThem} from '../ThemeContext'
-
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
+import {ThemeButton, useThemeUtils } from "../ui/themeUtils";
+import { fetchCakeDetails } from "../ db/database";
 
 const CakeDetail =() =>{
     const {id} = useParams<string>()
     const [cake, setCake] = useState<ICake>()
     const [cakes, setCakes] = useState<ICake[]>([]);
     const defaultTheme = createTheme();
-    const {isDarkTheme, toggleTheme} = useThem();
-    const [mode, setMode] = React.useState<'light' | 'dark'>(isDarkTheme? 'dark' : 'light');
+
+    const { theme, colorMode, toggleTheme } = useThemeUtils();
+    fetchCakeDetails(setCake,id);
     
-    function ThemeButton() {
-      const theme = useTheme();
-      const colorMode = React.useContext(ColorModeContext);
-      return (
-        <Box>
-          <IconButton sx={{ ml: 1 }} onClick={() => { colorMode.toggleColorMode(); toggleTheme(); }}  color="inherit">
-            {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-          </IconButton>
-        </Box>
-      );
-    }
-
-    useEffect(() => {
-      const fetchCakeDetails = async () => {
-        try {
-          const response = await fetch(`http://localhost:3001/cakes/${id}`);
-          if (!response.ok) {
-            throw new Error('Торт не найден');
-          }
-  
-          const data = await response.json();
-          setCake(data);
-        } catch (error) {
-          console.error('Ошибка при получении данных о торте:');
-        }
-      };
-  
-      fetchCakeDetails();
-    }, [id]);
-    
-    const colorMode = React.useMemo(
-      () => ({
-        toggleColorMode: () => {
-          console.log(isDarkTheme);
-          setMode(isDarkTheme ? 'light' : 'dark');
-        },
-      }),
-      [isDarkTheme,],
-    );
-
-    const theme = React.useMemo(
-      () =>
-        createTheme({
-          palette: {
-            mode,
-          },
-        }),
-      [mode],
-    );
-
-
     if (!cake) return <p>Loading ...</p>
+
     return <>
     <ThemeProvider theme={defaultTheme}>
             <CssBaseline />
             <ColorModeContext.Provider value={colorMode}>
             <ThemeProvider theme={theme}>
-    <Appbar position="static">
+    <AppBar position="static">
                 <Toolbar>
                     <Typography variant="h6" 
                     color="inherit" 
@@ -92,10 +34,10 @@ const CakeDetail =() =>{
                         Cake cataloge
                     </Typography>
                     <Box>
-                          <ThemeButton />
+                          <ThemeButton toggleTheme={toggleTheme}/>
                     </Box>
                 </Toolbar>
-            </Appbar>
+            </AppBar>
             <Box sx ={{bgcolor: 'background.default',minHeight: '100vh'}}>
             <Box>
             <Link to='/Cake'><Button>Back</Button> </Link>

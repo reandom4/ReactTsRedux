@@ -1,20 +1,17 @@
 import * as React from 'react';
 import { useEffect, useState } from "react";
-import axios from 'axios';
 
 import { ICake } from "../../assets/types/cake.interface";
 import CakeItem from './CakeItem';
 import AddCakeForm from "./AddCakeForm";
 import SearchCake from "./SearchCake";
 import { LeftMenu } from "./LeftMenu";
-import { useThem } from '../ThemeContext';
+import { getcount } from '../ db/database'
 
 import Appbar from '@mui/material/AppBar';
-import {Box, Grid, CssBaseline, Toolbar,Typography, alpha, IconButton, InputBase, Stack, styled, Pagination} from '@mui/material';
-import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
+import {Box, Grid, CssBaseline, Toolbar,Typography, alpha, InputBase, Stack, styled, Pagination, ThemeProvider, createTheme } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import {ThemeButton, useThemeUtils } from '../ui/themeUtils';
 
 
 export const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
@@ -62,82 +59,32 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const Home = () => {
 
   const defaultTheme = createTheme();
-  const { isDarkTheme, toggleTheme } = useThem();
-  const [mode, setMode] = React.useState<'light' | 'dark'>(isDarkTheme ? 'dark' : 'light');
-
   const [cakes, setCakes] = useState<ICake[]>([]);
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState<number>(1);
   const [cakeName, setCakeName] = useState<string>('');
   const itemperpage = 3;
 
-  const fetchCakes = async () => {
-    SearchCake({ setCakes, cakeName: cakeName, limit: itemperpage, offset: page})
-  };
-
-  const getcount = async (val = "") => {
-    try {
-      const response = await axios.get(`http://localhost:3001/countcakes/${val}`, {
-        params: {
-          cakename: val
-        },
-      });
-      const pages = response.data['count(*)']
-      const pagecount = Math.ceil(pages / itemperpage)
-      setPageCount(pagecount);
-    } catch (error) {
-      console.error('Ошибка при загрузке тортов:', (error as any).message);
-    }
-  };
+  const { theme, colorMode, toggleTheme } = useThemeUtils();
 
   useEffect(() => {
-    fetchCakes()
-    getcount()
+    SearchCake({ setCakes, cakeName: cakeName, limit: itemperpage, offset: page})
     // eslint-disable-next-line
   }, [page]);
 
-  function ThemeButton() {
-    const theme = useTheme();
-    const colorMode = React.useContext(ColorModeContext);
-    return (
-      <Box>
-        <IconButton sx={{ ml: 1 }} onClick={() => { colorMode.toggleColorMode(); toggleTheme(); }} color="inherit">
-          {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-        </IconButton>
-      </Box>
-    );
-  }
-
-  const colorMode = React.useMemo(
-    () => ({
-      toggleColorMode: () => {
-        console.log(isDarkTheme);
-        setMode(isDarkTheme ? 'light' : 'dark');
-      },
-    }),
-    [isDarkTheme],
-  );
-
-  const theme = React.useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode,
-        },
-      }),
-    [mode],
-  );
+  useEffect(() => {
+    getcount('',setPageCount)
+    // eslint-disable-next-line
+  }, []);
 
   const onPageChange = (event: React.ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage);
-    
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     SearchCake({ setCakes, cakeName: event.target.value, limit: itemperpage, offset: page })
     setCakeName(event.target.value)
-    
-    getcount(event.target.value)
+    getcount(event.target.value,setPageCount)
     setPage(1)
   };
 
@@ -149,7 +96,6 @@ const Home = () => {
           <ThemeProvider theme={theme}>
             <Appbar position="static">
               <Toolbar>
-
                 <LeftMenu setCake={setCakes} setPageCount={setPageCount} setPage={setPage}/>
                 <Typography variant="h6"
                   color="inherit"
@@ -173,7 +119,7 @@ const Home = () => {
                   <AddCakeForm setCake={setCakes} />
                 </Box>
                 <Box>
-                  <ThemeButton />
+                  <ThemeButton toggleTheme={toggleTheme}/>
                 </Box>
               </Toolbar>
             </Appbar>
