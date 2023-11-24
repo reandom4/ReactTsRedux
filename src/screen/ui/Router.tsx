@@ -4,6 +4,7 @@ import Home from "../Home/Home";
 import CakeDetail from "../CakeDetail/CakeDetail";
 import SignIn from "../SignIn/SignIn";
 import SignUp from "../Signup/SignUp";
+import Follow from "../Follow/Follow"
 
 interface PrivateRouteProps {
   element: ReactElement;
@@ -41,6 +42,10 @@ const Router = () => {
         <Route
           path='/cake/:id'
           element={<PrivateRoute element={<CakeDetail />} isAuthenticated={isAuthenticated} />}
+        />
+        <Route
+          path='/cake/follow'
+          element={<PrivateRoute element={<Follow />} isAuthenticated={isAuthenticated} />}
         />
         <Route path='*' element={<div>Not Found</div>} />
       </Routes>

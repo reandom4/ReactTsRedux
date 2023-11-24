@@ -1,5 +1,5 @@
 import React from 'react';
-import { createTheme, Theme } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { IconButton, Box, useTheme } from '@mui/material';
@@ -14,7 +14,9 @@ interface ThemeButtonProps {
 }
 
 export const ThemeButton: React.FC<ThemeButtonProps> = ({ toggleTheme }) => {
+  
   const theme = useTheme();
+
   const colorMode = React.useContext(ColorModeContext);
 
   return (
@@ -29,13 +31,10 @@ export const ThemeButton: React.FC<ThemeButtonProps> = ({ toggleTheme }) => {
 
 export const useThemeUtils = () => {
   const { isDarkTheme, toggleTheme } = useThem(); // Assuming this is correctly imported and defined
-
   const [mode, setMode] = React.useState<'light' | 'dark'>(() => isDarkTheme ? 'dark' : 'light');
-
   const colorMode = React.useMemo(
     () => ({
       toggleColorMode: () => {
-        console.log(isDarkTheme);
         setMode((prevMode) => (prevMode === 'dark' ? 'light' : 'dark'));
       },
     }),
@@ -52,7 +51,7 @@ export const useThemeUtils = () => {
     [mode],
   );
 
-  const defaultTheme = createTheme();
+  console.log(mode)
 
   return { theme, colorMode, toggleTheme };
 };

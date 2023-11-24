@@ -3,16 +3,13 @@ import React from "react";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import MenuIcon from '@mui/icons-material/Menu';
-import { ICake } from "../../assets/types/cake.interface";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import LogoutIcon from '@mui/icons-material/Logout';
-import axios from "axios";
 
 type Anchor = 'left';
 
 
-export function  LeftMenu  ({setCake,setPageCount,setPage}:{setPage:(newPage:(prev:number)=> number) => void, setPageCount:(newPage:(prev:number)=> number) => void, setCake: (newCakes: (prev: ICake[]) => ICake[]) => void})  {
+export function  LeftMenu  ()  {
 
   const navigate = useNavigate()
     const [state, setState] = React.useState({
@@ -32,42 +29,13 @@ export function  LeftMenu  ({setCake,setPageCount,setPage}:{setPage:(newPage:(pr
 
       setState({ ...state, [anchor]: open });
     };
-
-    interface RootState {
-        favorites: ICake[]
-      }
-
-    const [data,setData] = React.useState<ICake[] | null>(null)
-
-    const favorites = useSelector((state:RootState) => state.favorites)
-    
-    let isExist = false;
-    
     
     const showfollow = () => {
-        
-        setCake(() => [
-            ...favorites
-        ]);
-        setPageCount(() => Math.ceil(favorites.length / 3))
-        
+      navigate("/Cake/Follow")   
     }
 
     const showAll = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3001/countcakes`, {
-        });
-        const pages = response.data['count(*)']
-        const pagecount = Math.ceil(pages / 3)
-        setPageCount(() => pagecount);
-      } catch (error) {
-        console.error('Ошибка при загрузке тортов:', (error as any).message);
-      }
-        fetch('http://localhost:3001/cakes') // Обращаемся к нашему API
-          .then((response) => response.json())
-          .then((data) => setCake(data))
-          .catch((error) => console.error('Ошибка при получении тортов:', error));
-
+      navigate("/Cake")   
     }
 
     const back = () => {

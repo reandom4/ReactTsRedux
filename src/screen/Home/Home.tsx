@@ -74,8 +74,9 @@ const Home = () => {
 
   useEffect(() => {
     getcount('',setPageCount)
+    SearchCake({ setCakes, cakeName: cakeName, limit: itemperpage, offset: page})
     // eslint-disable-next-line
-  }, []);
+  }, [cakes]);
 
   const onPageChange = (event: React.ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage);
@@ -96,7 +97,7 @@ const Home = () => {
           <ThemeProvider theme={theme}>
             <Appbar position="static">
               <Toolbar>
-                <LeftMenu setCake={setCakes} setPageCount={setPageCount} setPage={setPage}/>
+                <LeftMenu/>
                 <Typography variant="h6"
                   color="inherit"
                   noWrap

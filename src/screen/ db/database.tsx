@@ -36,3 +36,23 @@ export const fetchCakeDetails = async (setCake:React.Dispatch<React.SetStateActi
       console.error('Ошибка при получении данных о торте:');
     }
   };
+
+export const delCake = async (setCakes: React.Dispatch<React.SetStateAction<ICake[]>> ,id:number) => {
+    try {
+      const response = await axios.delete(`http://localhost:3001/cakes/${id}`);
+  
+      if (response.status === 200) {
+        console.log(setCakes);
+        fetch('http://localhost:3001/cakes')
+          .then((response) => response.json())
+          .then((updatedData) => setCakes(updatedData))
+          .catch((error) => console.error('Ошибка при получении тортов:', error));
+        // Дополнительные действия после успешного удаления
+      } else {
+        console.error('Ошибка при удалении торта:', response.data.error);
+      }
+    } catch (error) {
+      console.error('Ошибка при удалении торта:', (error as any).message);
+    }
+      
+  };

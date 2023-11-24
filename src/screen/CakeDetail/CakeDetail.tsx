@@ -10,7 +10,7 @@ import { fetchCakeDetails } from "../ db/database";
 const CakeDetail =() =>{
     const {id} = useParams<string>()
     const [cake, setCake] = useState<ICake>()
-    const [cakes, setCakes] = useState<ICake[]>([]);
+    const [, setCakes] = useState<ICake[]>([]);
     const defaultTheme = createTheme();
 
     const { theme, colorMode, toggleTheme } = useThemeUtils();
