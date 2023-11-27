@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import {ICake} from "../../assets/types/cake.interface";
 import {useForm} from "react-hook-form";
 import Button from '@mui/material/Button';
@@ -23,7 +23,7 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
     const handleClose = () => {
       setOpen(false);
     };
-    const {register,handleSubmit,reset, formState: {errors}} = useForm<ICake>({
+    const {register,handleSubmit,reset} = useForm<ICake>({
         mode: 'onChange'
     })
 

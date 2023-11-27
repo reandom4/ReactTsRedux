@@ -3,9 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import { useNavigate } from 'react-router-dom';
 import Link from '@mui/material/Link';
 
 import Grid from '@mui/material/Grid';
@@ -14,11 +11,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import React from 'react';
-import axios from 'axios';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -33,8 +29,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
 export default function SignUp() {
     
-    const [error, setError] = useState<boolean>(false);
-    const navigate = useNavigate()
+    const [, setError] = useState<boolean>(false);
     const [open, setOpen] = useState(false);
     const [sucopen, setsucOpen] = useState(false);
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {

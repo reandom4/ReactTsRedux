@@ -14,7 +14,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import React from 'react';
@@ -32,12 +32,9 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
 export default function SignIn() {
     
-    const [error, setError] = useState<boolean>(false);
+    const [, setError] = useState<boolean>(false);
     const navigate = useNavigate()
     const [open, setOpen] = useState(false);
-
-
-     
 
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
@@ -46,13 +43,6 @@ export default function SignIn() {
 
     setOpen(false);
     };
-
-    function isValidEmail(email: string| null) {
-        if (email === null) {
-            return false;
-        }
-        return /\S+@\S+\.\S+/.test(email);
-      }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

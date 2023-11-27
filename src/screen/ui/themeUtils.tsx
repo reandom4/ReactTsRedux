@@ -38,7 +38,7 @@ export const useThemeUtils = () => {
         setMode((prevMode) => (prevMode === 'dark' ? 'light' : 'dark'));
       },
     }),
-    [isDarkTheme],
+    [],
   );
 
   const theme = React.useMemo(

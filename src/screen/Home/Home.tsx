@@ -76,7 +76,7 @@ const Home = () => {
     getcount('',setPageCount)
     SearchCake({ setCakes, cakeName: cakeName, limit: itemperpage, offset: page})
     // eslint-disable-next-line
-  }, [cakes]);
+  }, []);
 
   const onPageChange = (event: React.ChangeEvent<unknown>, newPage: number) => {
     setPage(newPage);
