@@ -60,6 +60,7 @@
     ]
   },
   "devDependencies": {
+    "@playwright/test": "^1.40.0",
     "@types/axios": "^0.14.0"
   }
 }
