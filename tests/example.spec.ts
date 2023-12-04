@@ -44,7 +44,7 @@ test('Verify that the user can view detailed information for each cake.', async 
   await page.getByRole('button', { name: 'Read More' }).nth(1).click();
   await expect(page.getByText('Back Детский1500₽Read More')).toBeVisible();
 });
-
+  
 test('Verify that the user can delete a cake', async ({ page }) => {
   
 });
