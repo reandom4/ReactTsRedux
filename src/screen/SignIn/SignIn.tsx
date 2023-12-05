@@ -50,7 +50,7 @@ export default function SignIn() {
     const uname = data.get('email');
     const pass = data.get('password')
     try {
-      const response = await axios.post('http://localhost:3001/login', {
+      const response = await axios.post('http://158.160.128.244/:3001/login', {
         username: uname,
         password: pass
       });
