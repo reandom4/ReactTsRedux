@@ -46,7 +46,24 @@ test('Verify that the user can view detailed information for each cake.', async 
 });
   
 test('Verify that the user can delete a cake', async ({ page }) => {
-  
+  await page.goto('http://localhost:3000/');
+  await page.getByLabel('Email Address *').click();
+  await page.getByLabel('Email Address *').fill('123@gmail.com');
+  await page.getByLabel('Password *').click();
+  await page.getByLabel('Password *').fill('123');
+  await page.getByRole('button', { name: 'Sign In' }).click();
+  await page.getByLabel('more').nth(1).click();
+  await page.getByLabel('Name *').click();
+  await page.getByLabel('Name *').fill('123');
+  await page.getByLabel('Price *').click();
+  await page.getByLabel('Price *').fill('123');
+  await page.getByLabel('Image *').click();
+  await page.getByLabel('Image *').fill('123');
+  await page.getByRole('button', { name: 'Add' }).click();
+  await page.getByRole('button', { name: 'Add' }).press('Escape');
+  await page.getByLabel('Go to page 8').click();
+  await expect(page.getByText('Back 123123₽Read More')).toBeVisible();
+  await page.locator('button:nth-child(4)').click();
 });
 
 
