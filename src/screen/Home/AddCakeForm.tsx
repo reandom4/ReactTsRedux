@@ -29,7 +29,7 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
 
 
     const addCake = (data:ICake) => {
-      fetch('http://158.160.128.244:3001/addcakes', {
+      fetch('http://localhost:3001/addcakes', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -39,7 +39,7 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
         .then((response) => response.json())
         .then((data) => {
           // Обновляем список тортов после добавления нового
-          fetch('http://158.160.128.244:3001/cakes')
+          fetch('http://localhost:3001/cakes')
             .then((response) => response.json())
             .then((updatedData) => setCake(updatedData))
             .catch((error) => console.error('Ошибка при получении тортов:', error));
