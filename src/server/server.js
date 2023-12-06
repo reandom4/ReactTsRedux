@@ -9,6 +9,7 @@ const secretKey = 'secretkey';
 const bcrypt = require('bcrypt'); 
 const saltRounds = 10;
 const corsOptions = {
+  
   origin: 'http://localhost:3000', // Replace with the actual origin of your React app
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
