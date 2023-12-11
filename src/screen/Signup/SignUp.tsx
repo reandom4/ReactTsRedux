@@ -52,7 +52,7 @@ export default function SignUp() {
         setOpen(true);
         return
     }
-        fetch('http://158.160.131.136:3001/register', {
+        fetch('http://158.160.137.59:3001/register', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

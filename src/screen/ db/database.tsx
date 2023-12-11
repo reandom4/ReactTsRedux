@@ -10,7 +10,7 @@ export default function db () {
 
 export const getcount = async (val = "",setPageCount: React.Dispatch<React.SetStateAction<number>>) => {
     try {
-      const response = await axios.get(`http://158.160.131.136:3001/countcakes/${val}`, {
+      const response = await axios.get(`http://158.160.137.59:3001/countcakes/${val}`, {
         params: {
           cakename: val
         },
@@ -25,7 +25,7 @@ export const getcount = async (val = "",setPageCount: React.Dispatch<React.SetSt
 
 export const fetchCakeDetails = async (setCake:React.Dispatch<React.SetStateAction<ICake | undefined>>, id:string | undefined) => {
     try {
-      const response = await fetch(`http://158.160.131.136:3001/cakes/${id}`);
+      const response = await fetch(`http://158.160.137.59:3001/cakes/${id}`);
       if (!response.ok) {
         throw new Error('Торт не найден');
       }
@@ -39,11 +39,11 @@ export const fetchCakeDetails = async (setCake:React.Dispatch<React.SetStateActi
 
 export const delCake = async (setCakes: React.Dispatch<React.SetStateAction<ICake[]>> ,id:number) => {
     try {
-      const response = await axios.delete(`http://158.160.131.136:3001/cakes/${id}`);
+      const response = await axios.delete(`http://158.160.137.59:3001/cakes/${id}`);
   
       if (response.status === 200) {
         console.log(setCakes);
-        fetch('http://158.160.131.136:3001/cakes')
+        fetch('http://158.160.137.59:3001/cakes')
           .then((response) => response.json())
           .then((updatedData) => setCakes(updatedData))
           .catch((error) => console.error('Ошибка при получении тортов:', error));

@@ -12,7 +12,7 @@ function SearchCake({setCakes,cakeName,limit,offset}:CakeSearchProps) {
     
     const fetchData = async () => {
     try {
-        const response = await axios.get(`http://158.160.131.136:3001/searchcakes/${cakeName}`, {
+        const response = await axios.get(`http://158.160.137.59:3001/searchcakes/${cakeName}`, {
             params: {
                 cakename: cakeName,
                 limit: limit,
