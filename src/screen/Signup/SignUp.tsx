@@ -1,22 +1,15 @@
 
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useState } from 'react';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import Snackbar from '@mui/material/Snackbar';
 import React from 'react';
+import { useState } from 'react';
 
-// TODO remove, this demo shouldn't need to reset the theme.
+import {Avatar,Button,CssBaseline,TextField,Link,Grid,Box,Typography,Container,Snackbar,createTheme,ThemeProvider,AlertProps} from '@mui/material';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import MuiAlert from '@mui/material/Alert';
+import { register } from '../ db/database';
+import { useNavigate } from 'react-router-dom';
+import { delay } from '@reduxjs/toolkit/dist/utils';
+
+
 const defaultTheme = createTheme();
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -28,63 +21,55 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
 
 export default function SignUp() {
-    
-    const [, setError] = useState<boolean>(false);
-    const [open, setOpen] = useState(false);
-    const [sucopen, setsucOpen] = useState(false);
-    const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+
+    const [err, setErr] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const navigate = useNavigate()
+
+    const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
         return;
         }
-        setOpen(false);
+        setErr(false);
+        setSuccess(false);
     };
-
-
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const uname = data.get('email');
-    const pass = data.get('password')
-    if (!isValidEmail(uname as string))
+    const uname = data.get('email') as string;
+    const pass = data.get('password' ) as string;
+    if(pass == null || uname === null )
     {
-        setError(true);
-        setOpen(true);
-        return
+      setErr(true);
+      return
     }
-        fetch('http://158.160.137.59:3001/register', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username: uname, password: pass}),
-          })
-            .then((response) => response.json())
-            .catch(error => {console.error('Ошибка при добавлении пользователя:', error);
-            setError(true);
-            setOpen(true);
-        })
-        setsucOpen(true);
+    if(await register(uname,pass))
+    {
+      setSuccess(true);
+      localStorage.setItem('newuser', 'true');
+      navigate('/')
+    }
+    else
+    {
+      setErr(true);
+      return
+    }
   };
 
-  function isValidEmail(email: string| null) {
-    if (email === null) {
-        return false;
-    }
-    return /\S+@\S+\.\S+/.test(email);
-  }
+
 
 
   return (
     <ThemeProvider theme={defaultTheme}>
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical:'top', horizontal:'center' }}>
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+        <Snackbar open={err} autoHideDuration={1500} onClose={handleCloseSnackbar} anchorOrigin={{ vertical:'top', horizontal:'center' }}>
+        <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
           Incorrect email
         </Alert>
 
         </Snackbar>
-        <Snackbar open={sucopen} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical:'top', horizontal:'center' }}>
-        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+        <Snackbar open={success} autoHideDuration={1500} onClose={handleCloseSnackbar} anchorOrigin={{ vertical:'top', horizontal:'center' }}>
+        <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
           Success
         </Alert>
 

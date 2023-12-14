@@ -1,8 +1,12 @@
 import axios from "axios";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { ICake } from "../../assets/types/cake.interface";
 
 const itemperpage = 3;
+const serverip = 'http://localhost:3001';
+
+
 
 export default function db () {
 
@@ -10,7 +14,7 @@ export default function db () {
 
 export const getcount = async (val = "",setPageCount: React.Dispatch<React.SetStateAction<number>>) => {
     try {
-      const response = await axios.get(`http://158.160.137.59:3001/countcakes/${val}`, {
+      const response = await axios.get(serverip + `/countcakes/${val}`, {
         params: {
           cakename: val
         },
@@ -25,7 +29,7 @@ export const getcount = async (val = "",setPageCount: React.Dispatch<React.SetSt
 
 export const fetchCakeDetails = async (setCake:React.Dispatch<React.SetStateAction<ICake | undefined>>, id:string | undefined) => {
     try {
-      const response = await fetch(`http://158.160.137.59:3001/cakes/${id}`);
+      const response = await fetch(serverip +`/cakes/${id}`);
       if (!response.ok) {
         throw new Error('Торт не найден');
       }
@@ -39,11 +43,11 @@ export const fetchCakeDetails = async (setCake:React.Dispatch<React.SetStateActi
 
 export const delCake = async (setCakes: React.Dispatch<React.SetStateAction<ICake[]>> ,id:number) => {
     try {
-      const response = await axios.delete(`http://158.160.137.59:3001/cakes/${id}`);
+      const response = await axios.delete(serverip +`/cakes/${id}`);
   
       if (response.status === 200) {
         console.log(setCakes);
-        fetch('http://158.160.137.59:3001/cakes')
+        fetch(serverip +'/cakes')
           .then((response) => response.json())
           .then((updatedData) => setCakes(updatedData))
           .catch((error) => console.error('Ошибка при получении тортов:', error));
@@ -56,3 +60,43 @@ export const delCake = async (setCakes: React.Dispatch<React.SetStateAction<ICak
     }
       
   };
+
+export const login = async (uname:string, pass:string) => {
+    try {
+      const response = await axios.post(serverip +'/login', {
+        username: uname,
+        password: pass
+      });
+      const { token } = response.data;
+      localStorage.setItem('token',token);
+      return true
+    } catch (error) {
+      return false
+    }
+  };
+
+export const register = async (uname:string, pass:string) => {
+    if (!isValidEmail(uname))
+    {
+        return false
+    }
+        fetch(serverip +'/register', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username: uname, password: pass}),
+          })
+            .then((response) => response.json())
+            .catch(error => {console.error('Ошибка при добавлении пользователя:', error);
+            return false
+        })
+        return true
+  };
+
+function isValidEmail(email: string| null) {
+  if (email === null) {
+      return false;
+  }
+  return /\S+@\S+\.\S+/.test(email);
+}

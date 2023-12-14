@@ -1,24 +1,15 @@
-
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import { useNavigate } from 'react-router-dom';
-import Link from '@mui/material/Link';
-
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import Snackbar from '@mui/material/Snackbar';
 import React from 'react';
-import axios from 'axios';
+
+import { useNavigate } from 'react-router-dom';
+
+
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import {Link,Grid,Box,Typography,Container,Checkbox,FormControlLabel,TextField,CssBaseline,Avatar,Button,Snackbar} from '@mui/material';
+
+import {login} from '../ db/database'
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -32,50 +23,61 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
 export default function SignIn() {
     
-    const [, setError] = useState<boolean>(false);
     const navigate = useNavigate()
     const [open, setOpen] = useState(false);
+    
+    
+    const [success, setSuccess] = useState(false);
+    console.log(success)
+    
+    if(localStorage.getItem('newuser') === 'true')
+    {
+      setSuccess(true) 
+      localStorage.setItem('newuser', 'false');
+      show()
+    }
 
-    const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    const show = () => {
+      setSuccess = true
+    } 
+    const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
         return;
         }
-
     setOpen(false);
+    setSuccess(true);
+    localStorage.setItem('newuser', 'false');
     };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const loginbutton = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const uname = data.get('email');
     const pass = data.get('password')
-    try {
-      const response = await axios.post('http://158.160.137.59:3001/login', {
-        username: uname,
-        password: pass
-      });
-      const { token } = response.data;
-      localStorage.setItem('token',token);
-      navigate('/Cake') 
-    } catch (error) {
-      console.error('Login failed:', (error as any).response.data.error);
-      setError(true);
+    if(await login(uname as string, pass as string))
+    {
+      navigate('/Cake')
+    }
+    else
+    {
       setOpen(true);
     }
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
   };
-
 
   return (
     <ThemeProvider theme={defaultTheme}>
-         <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical:'top', horizontal:'center' }}>
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+      <Snackbar open={open} autoHideDuration={2000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical:'top', horizontal:'center' }}>
+        <Alert onClose={handleCloseSnackbar} severity="error"  sx={{ width: '100%' }}>
           Incorrect login or password
         </Alert>
       </Snackbar>
+
+      <Snackbar open={success} autoHideDuration={2000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical:'top', horizontal:'center' }}>
+        <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
+          Success
+        </Alert>
+      </Snackbar>
+
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -92,7 +94,7 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={loginbutton} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
