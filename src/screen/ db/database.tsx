@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ICake } from "../../assets/types/cake.interface";
 
 const itemperpage = 3;
-const serverip = 'http://localhost:3001';
+const serverip = '158.160.137.59:3001';
 
 
 

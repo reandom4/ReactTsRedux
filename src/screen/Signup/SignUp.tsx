@@ -18,7 +18,6 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
     });
 
-
 export default function SignUp() {
 
     const [err, setErr] = useState(false);
@@ -55,9 +54,6 @@ export default function SignUp() {
       return
     }
   };
-
-
-
 
   return (
     <ThemeProvider theme={defaultTheme}>
