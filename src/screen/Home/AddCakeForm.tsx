@@ -1,15 +1,10 @@
 import React from "react";
 import {ICake} from "../../assets/types/cake.interface";
 import {useForm} from "react-hook-form";
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
-import { IconButton } from "@mui/material";
+import {addCake,update} from "../ db/database"
+
+import { IconButton,Dialog,DialogActions,DialogContent,DialogTitle,TextField,Grid,Button } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 
 
 
@@ -23,30 +18,17 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
     const handleClose = () => {
       setOpen(false);
     };
+    
     const {register,handleSubmit,reset} = useForm<ICake>({
         mode: 'onChange'
     })
 
-
-    const addCake = (data:ICake) => {
-      fetch('http://158.160.131.177:3001/addcakes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name: data.name, image: data.image, price: data.price}),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          // Обновляем список тортов после добавления нового
-          fetch('http://158.160.131.177:3001/cakes')
-            .then((response) => response.json())
-            .then((updatedData) => setCake(updatedData))
-            .catch((error) => console.error('Ошибка при получении тортов:', error));
-        })
-        .catch((error) => console.error('Ошибка при добавлении торта:', error));
-        reset()
-        
+    const addCakes = (data:ICake) => {
+      if (addCake(data))
+      {
+        update(setCake)
+      }
+      reset()
     };
 
     return(
@@ -65,7 +47,7 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
         <DialogTitle>Добавление тортов</DialogTitle>
         <DialogContent>
           
-        <form onSubmit={handleSubmit(addCake)} >
+        <form onSubmit={handleSubmit(addCakes)} >
         <Grid item xs={12} sm={6} sx={{width:350}}>
           <TextField
             required
@@ -100,7 +82,7 @@ function AddCakeForm({setCake}:{setCake: (newCakes: (prev: ICake[]) => ICake[]) 
           />
         </Grid>
         <DialogActions>
-          <Button onClick={handleSubmit(addCake)}>Add</Button>
+          <Button onClick={handleSubmit(addCakes)}>Add</Button>
         </DialogActions>
         </form>
         </DialogContent>

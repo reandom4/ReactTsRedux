@@ -1,9 +1,10 @@
-import { Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
+import { Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import MenuIcon from '@mui/icons-material/Menu';
-import { useNavigate } from "react-router-dom";
 import LogoutIcon from '@mui/icons-material/Logout';
 
 type Anchor = 'left';
@@ -12,6 +13,7 @@ type Anchor = 'left';
 export function  LeftMenu  ()  {
 
   const navigate = useNavigate()
+
     const [state, setState] = React.useState({
         left: false,
       });
@@ -26,7 +28,6 @@ export function  LeftMenu  ()  {
       ) {
         return;
       }
-
       setState({ ...state, [anchor]: open });
     };
     

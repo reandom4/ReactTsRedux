@@ -1,12 +1,14 @@
 import {ICake} from "../../assets/types/cake.interface";
 import {Link} from "react-router-dom";
+import { delCake } from "../ db/database";
 import { useDispatch, useSelector } from "react-redux";
 import { actions } from "../../store/favorites/favorites.slise";
+
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import {CardActions, CardContent, CardMedia, Grid, Typography,Box,Card,Button} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { delCake } from "../ db/database";
+
 
 interface CakeItemProps {
     cake: ICake;

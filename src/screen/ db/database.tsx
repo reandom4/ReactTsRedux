@@ -41,7 +41,30 @@ export const fetchCakeDetails = async (setCake:React.Dispatch<React.SetStateActi
     }
   };
 
-export const delCake = async (setCakes: React.Dispatch<React.SetStateAction<ICake[]>> ,id:number) => {
+export const addCake = (data:ICake) => {
+  try {  
+  fetch(serverip +'/addcakes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name: data.name, image: data.image, price: data.price}),
+    })
+    }catch (error) {
+      console.error('Ошибка при добовлении торта:');
+      return false
+    }
+    return true
+  };
+  
+export const update = (setCakes:(newCakes: (prev: ICake[]) => ICake[]) => void) => {
+  fetch(serverip +'/cakes')
+  .then((response) => response.json())
+  .then((updatedData) => setCakes(updatedData))
+  .catch((error) => console.error('Ошибка при получении тортов:', error));
+}
+
+export const delCake = async (setCakes:React.Dispatch<React.SetStateAction<ICake[]>>,id:number) => {
     try {
       const response = await axios.delete(serverip +`/cakes/${id}`);
   
@@ -99,4 +122,25 @@ function isValidEmail(email: string| null) {
       return false;
   }
   return /\S+@\S+\.\S+/.test(email);
+};
+
+export const searchCake = async (setCakes: React.Dispatch<React.SetStateAction<ICake[]>>,cakeName:string,limit:number,offset:number) => {
+    
+  const fetchData = async () => {
+  try {
+      const response = await axios.get(serverip +`/searchcakes/${cakeName}`, {
+          params: {
+              cakename: cakeName,
+              limit: limit,
+              offset: (offset -1) * 3 
+            },
+      });
+      setCakes (response.data)
+    } catch (error) {
+      console.error('Login failed:', (error as any).response.data.error);
+      return null
+    }
+  }
+
+  fetchData()
 }

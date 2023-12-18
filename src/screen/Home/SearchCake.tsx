@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ICake } from "../../assets/types/cake.interface";
+import {searchCake} from "../ db/database"
 
 interface CakeSearchProps {
     setCakes: React.Dispatch<React.SetStateAction<ICake[]>>;

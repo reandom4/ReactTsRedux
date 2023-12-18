@@ -20,18 +20,12 @@ const Follow = () => {
 
   const { theme, colorMode, toggleTheme } = useThemeUtils();
   const favorites = useSelector((state:RootState) => state.favorites)
+  
   useEffect(() => {
     setCakes(() => [
         ...favorites
     ]);
-    // eslint-disable-next-line
   }, []);
-
-  useEffect(() => {
-    
-    // eslint-disable-next-line
-  }, []);
-
 
   return (
     <>

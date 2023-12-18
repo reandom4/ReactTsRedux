@@ -7,7 +7,6 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import MuiAlert from '@mui/material/Alert';
 import { register } from '../ db/database';
 import { useNavigate } from 'react-router-dom';
-import { delay } from '@reduxjs/toolkit/dist/utils';
 
 
 const defaultTheme = createTheme();

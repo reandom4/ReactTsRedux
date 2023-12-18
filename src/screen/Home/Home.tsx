@@ -1,12 +1,10 @@
 import * as React from 'react';
 import { useEffect, useState } from "react";
-
 import { ICake } from "../../assets/types/cake.interface";
 import CakeItem from './CakeItem';
 import AddCakeForm from "./AddCakeForm";
-import SearchCake from "./SearchCake";
 import { LeftMenu } from "./LeftMenu";
-import { getcount } from '../ db/database'
+import { getcount, searchCake } from '../ db/database'
 
 import Appbar from '@mui/material/AppBar';
 import {Box, Grid, CssBaseline, Toolbar,Typography, alpha, InputBase, Stack, styled, Pagination, ThemeProvider, createTheme } from '@mui/material';
@@ -68,13 +66,13 @@ const Home = () => {
   const { theme, colorMode, toggleTheme } = useThemeUtils();
 
   useEffect(() => {
-    SearchCake({ setCakes, cakeName: cakeName, limit: itemperpage, offset: page})
+    searchCake( setCakes, cakeName, itemperpage, page)
     // eslint-disable-next-line
   }, [page]);
 
   useEffect(() => {
     getcount('',setPageCount)
-    SearchCake({ setCakes, cakeName: cakeName, limit: itemperpage, offset: page})
+    searchCake( setCakes, cakeName, itemperpage, page)
     // eslint-disable-next-line
   }, []);
 
@@ -83,7 +81,7 @@ const Home = () => {
   };
 
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    SearchCake({ setCakes, cakeName: event.target.value, limit: itemperpage, offset: page })
+    searchCake( setCakes, event.target.value, itemperpage, page )
     setCakeName(event.target.value)
     getcount(event.target.value,setPageCount)
     setPage(1)

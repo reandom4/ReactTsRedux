@@ -30,16 +30,7 @@ export default function SignIn() {
     const [success, setSuccess] = useState(false);
     console.log(success)
     
-    if(localStorage.getItem('newuser') === 'true')
-    {
-      setSuccess(true) 
-      localStorage.setItem('newuser', 'false');
-      show()
-    }
 
-    const show = () => {
-      setSuccess = true
-    } 
     const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
         return;

@@ -6,9 +6,6 @@ import { IconButton, Box, useTheme } from '@mui/material';
 import { ColorModeContext } from '../Home/Home';
 import { useThem } from '../ThemeContext';
 
-
-
-
 interface ThemeButtonProps {
   toggleTheme: () => void;
 }
@@ -16,9 +13,7 @@ interface ThemeButtonProps {
 export const ThemeButton: React.FC<ThemeButtonProps> = ({ toggleTheme }) => {
   
   const theme = useTheme();
-
   const colorMode = React.useContext(ColorModeContext);
-
   return (
     <Box>
       <IconButton sx={{ ml: 1 }} onClick={() => { colorMode.toggleColorMode(); toggleTheme(); }} color="inherit">
@@ -27,7 +22,6 @@ export const ThemeButton: React.FC<ThemeButtonProps> = ({ toggleTheme }) => {
     </Box>
   );
 };
-
 
 export const useThemeUtils = () => {
   const { isDarkTheme, toggleTheme } = useThem(); // Assuming this is correctly imported and defined
