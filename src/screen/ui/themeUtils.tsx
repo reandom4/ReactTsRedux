@@ -45,7 +45,5 @@ export const useThemeUtils = () => {
     [mode],
   );
 
-  console.log(mode)
-
   return { theme, colorMode, toggleTheme };
 };

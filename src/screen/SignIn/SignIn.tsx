@@ -25,7 +25,6 @@ export default function SignIn() {
     const [open, setOpen] = useState(false);
     
     const [success, setSuccess] = useState(false);
-    console.log(success)
     
 
     const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
