@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import React from 'react';
-
 import { useNavigate } from 'react-router-dom';
-
 
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -26,7 +24,6 @@ export default function SignIn() {
     const navigate = useNavigate()
     const [open, setOpen] = useState(false);
     
-    
     const [success, setSuccess] = useState(false);
     console.log(success)
     
@@ -36,7 +33,6 @@ export default function SignIn() {
         return;
         }
     setOpen(false);
-    setSuccess(true);
     localStorage.setItem('newuser', 'false');
     };
 

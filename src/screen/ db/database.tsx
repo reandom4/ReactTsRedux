@@ -1,10 +1,9 @@
 import axios from "axios";
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { ICake } from "../../assets/types/cake.interface";
 
 const itemperpage = 3;
-const serverip = '158.160.137.59:3001';
+const serverip = 'http://158.160.137.59:3001';
 
 
 
